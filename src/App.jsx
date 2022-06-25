@@ -1,24 +1,12 @@
-import logo from './logo.svg'
-import styles from './App.module.css'
+// import { Navigation } from './Navigation.jsx'
+import { Nav } from './Nav.jsx'
+import { Footer } from './Footer.jsx'
 
 function App() {
   return (
-    <div class={styles.App}>
-      <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt='logo' />
-        <p class='text-4xl text-red-400 tracking-widest'>
-          Edit <code>src/App.jsx</code> and save to reload.
-        </p>
-        <p class='text-4xl text-red-400 tracking-widest'>Test</p>
-        <a
-          class={styles.link}
-          href='https://github.com/solidjs/solid'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Learn Solid
-        </a>
-      </header>
+    <div class='bg-hooplaBackground w-full min-h-screen text-white'>
+      <Nav />
+      <Footer />
     </div>
   )
 }
