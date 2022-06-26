@@ -19,7 +19,7 @@ export const NavLinks = () => {
     },
     {
       title: 'The Antichrist',
-      translators: ['H. L. Mencken'],
+      translators: ['H. L. Mencken', 'blah', 'bleh', 'omg'],
     },
   ]
   //TODO remove static data and change to data from backend
@@ -41,21 +41,10 @@ export const NavLinks = () => {
                 }
               >
                 {book.title}
-                <span class='md:mt-1 md:hidden inline'>
-                  <ion-icon
-                    name={`${
-                      heading() === book.title ? 'chevron-up' : 'chevron-down'
-                    }`}
-                    size='medium'
-                  />
-                </span>
-                <span class='md:mt-1 md:ml-2 md:block hidden group-hover:rotate-180 group-hover:-mt-2'>
-                  <ion-icon name='chevron-down' size='medium' />
-                </span>
               </h1>
               <For each={book.translators} fallback={<div>Loading...</div>}>
                 {(translator) => (
-                  <h2 class=' absolute top-20 text-gray-600 my-2.5 hidden group-hover:md:block hover:md:block'>
+                  <h2 class='text-linkHover my-2.5 hidden group-hover:md:block hover:md:block'>
                     {translator}
                   </h2>
                 )}

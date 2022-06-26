@@ -9,10 +9,14 @@ module.exports = {
     //   lg: '976px',
     //   xl: '1440px',
     // },
+    fontFamily: {
+      sans: ['Inter', 'sans-serif'],
+    },
     extend: {
       colors: {
         hooplaBackground: '#1d1d1d',
-        linkHover: '#a3be8c',
+        hooplaLighter: '#4a4a4a',
+        linkHover: '#0067bc',
       },
     },
   },
