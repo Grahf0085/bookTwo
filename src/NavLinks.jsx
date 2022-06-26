@@ -33,7 +33,7 @@ export const NavLinks = () => {
           <>
             <div class='px-3 md:cursor-pointer group'>
               <h1
-                class='py-7 flex justify-between items-center md:pr-0 pr-5'
+                class='py-2 flex justify-between items-center md:px-2 pr-5'
                 onClick={() =>
                   heading() !== book.title
                     ? setHeading(book.title)
@@ -55,12 +55,13 @@ export const NavLinks = () => {
               </h1>
               <For each={book.translators} fallback={<div>Loading...</div>}>
                 {(translator) => (
-                  <h2 class=' absolute top-20 text-gray-600 my-2.5 hidden group-hover:md:block hover:md:block'>
+                  <h2 class=' absolute top-20 text-linkHover my-2.5 hidden group-hover:md:block hover:md:block'>
                     {translator}
                   </h2>
                 )}
               </For>
             </div>
+            {/* Mobile Menu */}
             <div class={`${heading() === book.title ? 'md:hidden' : 'hidden'}`}>
               <For each={book.translators} fallback={<div>Loading...</div>}>
                 {(translator) => (
