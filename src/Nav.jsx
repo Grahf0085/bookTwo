@@ -8,9 +8,15 @@ export const Nav = () => {
 
   return (
     <nav>
-      <div class='flex items-center justify-around'>
+      <div class='flex items-center justify-between'>
         <div class='z-50 p-5 md:w-auto w-full flex justify-between'>
-          <img src={face} alt='Nietzsche' class='h-14 w-14 md:cursor-pointer' />
+          <Link href='/'>
+            <img
+              src={face}
+              alt='Nietzsche'
+              class='h-14 w-14 md:cursor-pointer rounded-full'
+            />
+          </Link>
           <div class='md:hidden' onClick={() => setOpen(!open())}>
             <ion-icon
               name={`${open() ? 'close' : 'menu-sharp'}`}
@@ -18,12 +24,7 @@ export const Nav = () => {
             />
           </div>
         </div>
-        <ul class='md:flex hidden items-center gap-8'>
-          <li>
-            <Link href='/' class='py-7 px-3'>
-              Home
-            </Link>
-          </li>
+        <ul class='md:flex md:w-full md:justify-center hidden items-center'>
           <NavLinks />
         </ul>
         {/* Mobile */}
