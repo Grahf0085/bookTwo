@@ -31,9 +31,9 @@ export const NavLinks = () => {
       <For each={books} fallback={<div>Loading...</div>}>
         {(book) => (
           <>
-            <div class='px-3 md:cursor-pointer group'>
+            <div class='px-7 cursor-pointer group flex flex-col items-center self-center'>
               <h1
-                class='py-7 flex justify-between items-center md:pr-0 pr-5'
+                class='py-2 md:px-2'
                 onClick={() =>
                   heading() !== book.title
                     ? setHeading(book.title)
@@ -44,9 +44,15 @@ export const NavLinks = () => {
               </h1>
               <For each={book.translators} fallback={<div>Loading...</div>}>
                 {(translator) => (
-                  <h2 class='text-linkHover my-2.5 hidden group-hover:md:block hover:md:block'>
-                    {translator}
-                  </h2>
+                  <div>
+                    <div class='absolute top-20 hidden group-hover:md:block hover:md:block'>
+                      <div class='py-3'>
+                        <div class='bg-hooplaBackground p-5 grid grid-cols-1'>
+                          <h2 class='text-linkHover'>{translator}</h2>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 )}
               </For>
             </div>

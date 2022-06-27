@@ -9,7 +9,7 @@ export const Nav = () => {
   return (
     <nav>
       <div class='flex justify-around'>
-        <div class='z-50 p-5 md:w-auto w-full flex justify-between'>
+        <div class='z-50 p-4 md:w-auto w-full flex justify-between'>
           <Link href='/'>
             <img src={face} alt='Nietzsche' class='h-14 w-14 rounded-full' />
           </Link>

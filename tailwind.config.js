@@ -16,7 +16,7 @@ module.exports = {
       colors: {
         hooplaBackground: '#1d1d1d',
         hooplaLighter: '#4a4a4a',
-        linkHover: '#0067bc',
+        linkHover: '#8FCDFF',
       },
     },
   },

@@ -16,6 +16,6 @@ html {
 
 @layer base {
   h1 {
-    @apply border-b-2 border-dotted hover:border-solid hover:border-linkHover hover:border-b-2 hover:bg-hooplaLighter;
+    @apply border-b-2 border-dotted group-hover:border-solid group-hover:border-linkHover group-hover:border-2 group-hover:rounded-md group-hover:bg-black;
   }
 }
