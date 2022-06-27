@@ -11,6 +11,7 @@ module.exports = {
     // },
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
+      rubik: ['Rubik', 'mono'],
     },
     extend: {
       colors: {

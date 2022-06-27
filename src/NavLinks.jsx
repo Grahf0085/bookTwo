@@ -33,7 +33,7 @@ export const NavLinks = () => {
           <>
             <div class='px-5 md:cursor-pointer group flex items-center justify-center h-20'>
               <h1
-                class='py-4 flex justify-between items-center md:px-4 pr-5 bg-hooplaLighter rounded-sm border-dotted border-b-2 group-hover:border-solid group-hover:border-linkHover group-hover:bg-hooplaBackground'
+                class='whitespace-nowrap font-rubik text-lg py-2 flex justify-between items-center md:px-4 pr-5 bg-hooplaLighter rounded-sm border-dotted border-b-2 group-hover:border-solid group-hover:border-linkHover group-hover:bg-hooplaBackground'
                 onClick={() =>
                   heading() !== book.title
                     ? setHeading(book.title)
@@ -54,9 +54,12 @@ export const NavLinks = () => {
                 {/* </span> */}
               </h1>
               <ul class='absolute top-20 bg-hooplaLighter rounded-sm group group-hover:md:block hover:md:block text-center'>
+                <li class='px-4 invisible h-0 font-rubik text-lg'>
+                  {book.title}
+                </li>
                 <For each={book.translators} fallback={<div>Loading...</div>}>
                   {(translator) => (
-                    <li class='text-linkHover my-2.5 hidden group-hover:md:block hover:md:block md:my-0 p-3'>
+                    <li class='font-rubik text-sm text-linkHover my-2.5 hidden group-hover:md:block hover:md:block md:my-0 p-3'>
                       {translator}
                     </li>
                   )}

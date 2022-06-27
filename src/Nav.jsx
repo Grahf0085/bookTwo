@@ -8,7 +8,7 @@ export const Nav = () => {
 
   return (
     <nav>
-      <div class='flex items-center justify-between'>
+      <div class='flex items-center justify-between bg-hooplaLighter rounded-sm mx-2 my-2'>
         <div class='z-50 p-5 md:w-auto w-full flex justify-between'>
           <Link href='/'>
             <img
@@ -33,11 +33,6 @@ export const Nav = () => {
             open() ? 'left-0' : 'left-[-100%]'
           }`}
         >
-          <li>
-            <Link href='/' class='py-7 px-3 inline-block'>
-              Home
-            </Link>
-          </li>
           <NavLinks />
         </ul>
       </div>

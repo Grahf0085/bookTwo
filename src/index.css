@@ -1,4 +1,5 @@
 @import url('https://rsms.me/inter/inter.css');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
 
 html {
   font-family: 'Inter', sans-serif;
@@ -14,8 +15,8 @@ html {
 @tailwind components;
 @tailwind utilities;
 
-/* @layer base { */
-/*   h1 { */
-/*     @apply border-b-2 border-dotted group-hover:border-solid group-hover:border-linkHover group-hover:border-b-2 group-hover:rounded-md group-hover:bg-hooplaLighter; */
-/*   } */
-/* } */
+@layer base {
+  html {
+    background: #1d1d1d;
+  }
+}
