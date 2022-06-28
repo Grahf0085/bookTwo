@@ -31,9 +31,9 @@ export const NavLinks = () => {
       <For each={books} fallback={<div>Loading...</div>}>
         {(book) => (
           <>
-            <div class='px-5 md:cursor-pointer group flex items-center justify-center h-20'>
+            <div class='md:px-5 group md:flex md:items-center md:justify-center md:h-20'>
               <h1
-                class='whitespace-nowrap font-rubik text-lg py-2 flex justify-between items-center md:px-4 pr-5 bg-hooplaLighter rounded-sm border-dotted border-b-2 group-hover:border-solid group-hover:border-linkHover group-hover:bg-hooplaBackground'
+                class='md:cursor-pointer whitespace-nowrap font-rubik py-3 flex justify-between items-center px-4 bg-hooplaBackground md:bg-hooplaLighter rounded-sm md:border-dotted md:border-b-2 group-hover:border-solid group-hover:border-linkHover group-hover:bg-hooplaBackground'
                 onClick={() =>
                   heading() !== book.title
                     ? setHeading(book.title)
@@ -41,7 +41,7 @@ export const NavLinks = () => {
                 }
               >
                 {book.title}
-                <span class='md:hidden inline'>
+                <span class='md:hidden inline pr-3'>
                   <ion-icon
                     name={`${
                       heading() === book.title ? 'chevron-up' : 'chevron-down'
@@ -49,14 +49,9 @@ export const NavLinks = () => {
                     size='medium'
                   />
                 </span>
-                {/* <span class='md:mt-1 md:ml-2 md:block hidden group-hover:rotate-180 group-hover:-mt-2'> */}
-                {/*   <ion-icon name='chevron-down' size='medium' /> */}
-                {/* </span> */}
               </h1>
               <ul class='absolute top-20 bg-hooplaLighter rounded-sm group group-hover:md:block hover:md:block text-center'>
-                <li class='px-4 invisible h-0 font-rubik text-lg'>
-                  {book.title}
-                </li>
+                <li class='px-4 invisible h-0 font-rubik'>{book.title}</li>
                 <For each={book.translators} fallback={<div>Loading...</div>}>
                   {(translator) => (
                     <li class='font-rubik text-sm text-linkHover my-2.5 hidden group-hover:md:block hover:md:block md:my-0 p-3'>
@@ -66,12 +61,17 @@ export const NavLinks = () => {
                 </For>
               </ul>
             </div>
+            {/* Mobile */}
             <div class={`${heading() === book.title ? 'md:hidden' : 'hidden'}`}>
-              <For each={book.translators} fallback={<div>Loading...</div>}>
-                {(translator) => (
-                  <h2 class='py-4 pl-7 md:pr-0'>{translator}</h2>
-                )}
-              </For>
+              <ul class='bg-hooplaBackground rounded-sm'>
+                <For each={book.translators} fallback={<div>Loading...</div>}>
+                  {(translator) => (
+                    <li class='font-rubik text-sm text-linkHover bg-hooplaBackground py-4 pl-7'>
+                      {translator}
+                    </li>
+                  )}
+                </For>
+              </ul>
             </div>
           </>
         )}

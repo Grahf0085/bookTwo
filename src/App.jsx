@@ -2,6 +2,7 @@
 import { Nav } from './Nav.jsx'
 import { Footer } from './Footer.jsx'
 
+//TODO hide text for mobile when menu is open
 function App() {
   return (
     <div class='bg-hooplaBackground w-full min-h-screen text-white'>
