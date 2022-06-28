@@ -3,14 +3,15 @@
 module.exports = {
   content: ['./src/**/*.{html,js,jsx}'],
   theme: {
-    // screens: {
-    //   sm: '480px',
-    //   md: '768px',
-    //   lg: '976px',
-    //   xl: '1440px',
-    // },
+    screens: {
+      sm: '640px',
+      md: '811px',
+      lg: '1024px',
+      xl: '1536px',
+    },
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
+      rubik: ['Rubik', 'mono'],
     },
     extend: {
       colors: {

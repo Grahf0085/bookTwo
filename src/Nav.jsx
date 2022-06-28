@@ -8,24 +8,31 @@ export const Nav = () => {
 
   return (
     <nav>
-      <div class='flex justify-around'>
-        <div class='z-50 p-4 md:w-auto w-full flex justify-between'>
+      <div class='flex items-center justify-between bg-hooplaLighter rounded-sm md:mx-2 md:my-2 md:max-h-full max-h-12'>
+        <div class='z-50 p-5 md:w-auto w-full flex justify-between'>
           <Link href='/'>
-            <img src={face} alt='Nietzsche' class='h-14 w-14 rounded-full' />
+            <img
+              src={face}
+              alt='Nietzsche'
+              class='md:h-14 md:w-14 md:cursor-pointer rounded-full h-10 w-10'
+            />
           </Link>
-          <div class='md:hidden' onClick={() => setOpen(!open())}>
+          <div
+            class='md:hidden flex items-center'
+            onClick={() => setOpen(!open())}
+          >
             <ion-icon
               name={`${open() ? 'close' : 'menu-sharp'}`}
               size='large'
             />
           </div>
         </div>
-        <ul class='md:flex hidden w-full justify-center'>
+        <ul class='md:flex md:w-full md:justify-center hidden items-center'>
           <NavLinks />
         </ul>
         {/* Mobile */}
         <ul
-          class={`md:hidden fixed w-full top-0 overflow-y-auto bottom-0 py-24 pl-4 duration-500 ${
+          class={`md:hidden fixed w-full top-0 overflow-y-auto bottom-0 py-12 duration-500 ${
             open() ? 'left-0' : 'left-[-100%]'
           }`}
         >
