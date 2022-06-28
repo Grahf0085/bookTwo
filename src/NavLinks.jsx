@@ -19,7 +19,7 @@ export const NavLinks = () => {
     },
     {
       title: 'The Antichrist',
-      translators: ['H. L. Mencken'],
+      translators: ['H. L. Mencken', 'blah', 'bleh', 'omg'],
     },
   ]
   //TODO remove static data and change to data from backend
