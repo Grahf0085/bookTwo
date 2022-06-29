@@ -1,73 +1,76 @@
-import { For } from 'solid-js'
-import { createSignal } from 'solid-js'
+import { For, createSignal, createResource, onMount } from 'solid-js'
+
+import { getTitles, getTranslators } from '../nietzscheAPI.js'
 
 export const NavLinks = () => {
   const [heading, setHeading] = createSignal('')
+  const [titles, setTitles] = createSignal([])
+  const [hovered, setHovered] = createSignal('')
 
-  const books = [
-    {
-      title: 'Beyond Good and Evil',
-      translators: ['Helen Zimmern'],
-    },
-    {
-      title: 'On The Geneology Of Morality',
-      translators: ['Horace B. Samuel'],
-    },
-    {
-      title: 'Human, All Too Human',
-      translators: ['Helen Zimmern', 'sdfdsfdsf', 'sdffasdf'],
-    },
-    {
-      title: 'The Antichrist',
-      translators: ['H. L. Mencken', 'blah', 'bleh', 'omg'],
-    },
-  ]
+  const [translators] = createResource(hovered, getTranslators)
+  const [mobileTranslators] = createResource(heading, getTranslators)
+
+  onMount(async () => {
+    const res = await getTitles()
+    setTitles(await res)
+  })
+
+  const handleMouseHover = (title) => {
+    setHovered(title)
+  }
+
   //TODO remove static data and change to data from backend
   //TODO each select changes a signal to change text displayed
-  //TODO add that cool green dot border highlighting from that blog
 
   return (
     <>
-      <For each={books} fallback={<div>Loading...</div>}>
-        {(book) => (
+      <For each={titles()} fallback={<div>Searching...</div>}>
+        {(title) => (
           <>
-            <div class='md:px-5 group md:flex md:items-center md:justify-center md:h-20'>
+            <div
+              class='md:px-5 group md:flex md:items-center md:justify-center md:h-20'
+              onMouseOver={[handleMouseHover, title.title]}
+            >
               <h1
                 class='md:cursor-pointer whitespace-nowrap font-rubik py-3 flex justify-between items-center px-4 bg-hooplaBackground md:bg-hooplaLighter rounded-sm md:border-dotted md:border-b-2 group-hover:border-solid group-hover:border-linkHover group-hover:bg-hooplaBackground'
-                onClick={() =>
-                  heading() !== book.title
-                    ? setHeading(book.title)
+                onClick={() => {
+                  heading() !== title.title
+                    ? setHeading(title.title)
                     : setHeading('')
-                }
+                }}
               >
-                {book.title}
+                {title.title}
                 <span class='md:hidden inline pr-3'>
                   <ion-icon
                     name={`${
-                      heading() === book.title ? 'chevron-up' : 'chevron-down'
+                      heading() === title.title ? 'chevron-up' : 'chevron-down'
                     }`}
                     size='medium'
                   />
                 </span>
               </h1>
               <ul class='absolute top-20 bg-hooplaLighter rounded-sm group group-hover:md:block hover:md:block text-center'>
-                <li class='px-4 invisible h-0 font-rubik'>{book.title}</li>
-                <For each={book.translators} fallback={<div>Loading...</div>}>
+                <li class='px-4 invisible h-0 font-rubik'>{title.title}</li>
+                <For each={translators()}>
                   {(translator) => (
                     <li class='font-rubik text-sm text-linkHover my-2.5 hidden group-hover:md:block hover:md:block md:my-0 p-3'>
-                      {translator}
+                      {translator.translatorName}
                     </li>
                   )}
                 </For>
               </ul>
             </div>
-            {/* Mobile */}
-            <div class={`${heading() === book.title ? 'md:hidden' : 'hidden'}`}>
+            <div
+              class={`${heading() === title.title ? 'md:hidden' : 'hidden'}`}
+            >
               <ul class='bg-hooplaBackground rounded-sm'>
-                <For each={book.translators} fallback={<div>Loading...</div>}>
+                <For
+                  each={mobileTranslators()}
+                  fallback={<div>Loading...</div>}
+                >
                   {(translator) => (
                     <li class='font-rubik text-sm text-linkHover bg-hooplaBackground py-4 pl-7'>
-                      {translator}
+                      {translator.translatorName}
                     </li>
                   )}
                 </For>
