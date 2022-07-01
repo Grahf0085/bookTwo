@@ -1,5 +1,5 @@
 import { For, createSignal, createResource, onMount } from 'solid-js'
-import { getTitles, getTranslators } from '../nietzscheAPI.js'
+import { fetchTitles, fetchTranslators } from '../nietzscheAPI.js'
 import { useSetSelectedBook } from './state/SelectedBookProvider.jsx'
 
 export const NavLinks = () => {
@@ -7,13 +7,13 @@ export const NavLinks = () => {
   const [titles, setTitles] = createSignal([])
   const [hovered, setHovered] = createSignal('') //needs passed up to app for selected book title
 
-  const [translators] = createResource(hovered, getTranslators)
-  const [mobileTranslators] = createResource(heading, getTranslators)
+  const [translators] = createResource(hovered, fetchTranslators)
+  const [mobileTranslators] = createResource(heading, fetchTranslators)
 
   const setSelectedBook = useSetSelectedBook()
 
   onMount(async () => {
-    const res = await getTitles()
+    const res = await fetchTitles()
     setTitles(await res)
   })
 
