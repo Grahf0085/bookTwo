@@ -1,14 +1,16 @@
 import { For, createSignal, createResource, onMount } from 'solid-js'
-
 import { getTitles, getTranslators } from '../nietzscheAPI.js'
+import { useSetSelectedBook } from './state/SelectedBookProvider.jsx'
 
 export const NavLinks = () => {
-  const [heading, setHeading] = createSignal('')
+  const [heading, setHeading] = createSignal('') //needs passed up to app for selected book title on mobile
   const [titles, setTitles] = createSignal([])
-  const [hovered, setHovered] = createSignal('')
+  const [hovered, setHovered] = createSignal('') //needs passed up to app for selected book title
 
   const [translators] = createResource(hovered, getTranslators)
   const [mobileTranslators] = createResource(heading, getTranslators)
+
+  const setSelectedBook = useSetSelectedBook()
 
   onMount(async () => {
     const res = await getTitles()
@@ -18,9 +20,6 @@ export const NavLinks = () => {
   const handleMouseHover = (title) => {
     setHovered(title)
   }
-
-  //TODO remove static data and change to data from backend
-  //TODO each select changes a signal to change text displayed
 
   return (
     <>
@@ -53,7 +52,14 @@ export const NavLinks = () => {
                 <li class='px-4 invisible h-0 font-rubik'>{title.title}</li>
                 <For each={translators()}>
                   {(translator) => (
-                    <li class='font-rubik text-sm text-linkHover my-2.5 hidden group-hover:md:block hover:md:block md:my-0 p-3'>
+                    <li
+                      onClick={() => {
+                        setSelectedBook(
+                          `${hovered()}+${translator.translatorName}`
+                        )
+                      }}
+                      class=' cursor-pointer font-rubik text-sm text-linkHover my-2.5 hidden group-hover:md:block hover:md:block md:my-0 p-3'
+                    >
                       {translator.translatorName}
                     </li>
                   )}
@@ -69,7 +75,14 @@ export const NavLinks = () => {
                   fallback={<div>Loading...</div>}
                 >
                   {(translator) => (
-                    <li class='font-rubik text-sm text-linkHover bg-hooplaBackground py-4 pl-7'>
+                    <li
+                      onClick={() =>
+                        setSelectedBook(
+                          `${hovered()}+${translator.translatorName}`
+                        )
+                      }
+                      class='font-rubik text-sm text-linkHover bg-hooplaBackground py-4 pl-7'
+                    >
                       {translator.translatorName}
                     </li>
                   )}
