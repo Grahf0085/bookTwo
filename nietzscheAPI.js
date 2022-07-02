@@ -27,3 +27,11 @@ export const fetchBookChapters = async (book) => {
   const results = await response.json()
   return results
 }
+
+export const fetchAllBookInfo = async (book) => {
+  if (book.trim() === '') return []
+
+  const response = await fetch(`http://localhost:1844/api/chapter-info/${book}`)
+  const results = await response.json()
+  return results
+}
