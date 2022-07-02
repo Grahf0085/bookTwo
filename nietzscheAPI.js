@@ -17,10 +17,13 @@ export const fetchBookInfo = async (book) => {
 
   const response = await fetch(`http://localhost:1844/api/book-info/${book}`)
   const results = await response.json()
-  return [
-    results.title,
-    results.pubDate,
-    results.translatorName,
-    results.translatedDate,
-  ]
+  return [results]
+}
+
+export const fetchBookChapters = async (book) => {
+  if (book.trim() === '') return []
+
+  const response = await fetch(`http://localhost:1844/api/chapter-info/${book}`)
+  const results = await response.json()
+  return results
 }

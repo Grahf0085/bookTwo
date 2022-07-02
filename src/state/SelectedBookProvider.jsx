@@ -2,10 +2,9 @@ import {
   createSignal,
   createContext,
   useContext,
-  // createEffect,
   createResource,
 } from 'solid-js'
-import { fetchBookInfo } from '../../nietzscheAPI.js'
+import { fetchBookInfo, fetchBookChapters } from '../../nietzscheAPI.js'
 
 const SelectedBookContext = createContext()
 
@@ -24,16 +23,12 @@ export const useSelectedBook = () => {
   const selectedBook = useContext(SelectedBookContext)[0]
 
   const [fetchedBookInfo] = createResource(selectedBook, fetchBookInfo)
+  const [fetchedBookChapters] = createResource(selectedBook, fetchBookChapters)
 
-  return fetchedBookInfo
+  return [fetchedBookInfo, fetchedBookChapters]
 }
 
 export const useSetSelectedBook = () => {
   const setSelectedBook = useContext(SelectedBookContext)[1]
   return setSelectedBook
 }
-
-// export const useFetchedBookInfo = () => {
-//   const fetchedBookInfo = useContext(SelectedBookContext)[2]
-//   return fetchedBookInfo
-// }
