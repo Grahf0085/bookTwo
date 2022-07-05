@@ -4,7 +4,11 @@ import {
   useContext,
   createResource,
 } from 'solid-js'
-import { fetchBookInfo, fetchBookChapters } from '../../nietzscheAPI.js'
+import {
+  fetchBookInfo,
+  fetchBookChapters,
+  fetchBookParagraphs,
+} from '../../nietzscheAPI.js'
 
 const SelectedBookContext = createContext()
 
@@ -17,6 +21,12 @@ export const SelectedBookProvider = (props) => {
       {props.children}
     </SelectedBookContext.Provider>
   )
+}
+
+export const useSelectedBook = () => {
+  // console.log('what im looking for: ', useContext(SelectedBookContext)[0])
+  const selectedBook = useContext(SelectedBookContext)[0]
+  return selectedBook
 }
 
 export const useSetSelectedBook = () => {
@@ -38,4 +48,15 @@ export const useChapterInfo = () => {
   const [fetchedBookChapters] = createResource(selectedBook, fetchBookChapters)
 
   return fetchedBookChapters
+}
+
+export const useParagraphInfo = () => {
+  const selectedBook = useContext(SelectedBookContext)[0]
+
+  const [fetchedBookParagraphs] = createResource(
+    selectedBook,
+    fetchBookParagraphs
+  )
+
+  return fetchedBookParagraphs
 }

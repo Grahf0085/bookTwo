@@ -1,6 +1,6 @@
 import { For, createSignal, createResource, onMount } from 'solid-js'
-import { fetchTitles, fetchTranslators } from '../nietzscheAPI.js'
-import { useSetSelectedBook } from './state/SelectedBookProvider.jsx'
+import { fetchTitles, fetchTranslators } from '../../nietzscheAPI.js'
+import { useSetSelectedBook } from '../providers/SelectedBookProvider.jsx'
 
 export const NavLinks = () => {
   const [heading, setHeading] = createSignal('') //needs passed up to app for selected book title on mobile
