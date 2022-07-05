@@ -13,7 +13,7 @@ export const FullText = (props) => {
   })
 
   return (
-    <div class='h-4/5'>
+    <div class='flex flex-col flex-1'>
       <Show when={slider() <= 0}>
         <BookInfo />
       </Show>
@@ -23,7 +23,7 @@ export const FullText = (props) => {
       </Show>
 
       <Show when={bookSelected()}>
-        <div class='w-screen flex justify-center'>
+        <div class='w-full mt-auto flex justify-center'>
           <input
             type='range'
             min='0'

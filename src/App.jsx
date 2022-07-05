@@ -32,7 +32,7 @@ function App() {
     <div
       tabIndex={-1}
       onKeyDown={() => handleKeyDown(event)}
-      class='bg-hooplaBackground w-full h-full text-white'
+      class='bg-hooplaBackground w-full min-h-[99vh] text-white flex flex-col' //TODO check for another way besides 99vh
     >
       <Nav />
       <FullText pageChange={pageChange()} />
