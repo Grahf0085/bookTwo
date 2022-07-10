@@ -1,16 +1,16 @@
 import { For } from 'solid-js'
-import { useChapterInfo } from '../providers/SelectedBookProvider.jsx'
+import { useParagraphInfo } from '../providers/SelectedBookProvider.jsx'
 
-export const ChapterInfo = () => {
-  const chapterInfo = useChapterInfo()
+export const Paragraphs = () => {
+  const paragraphInfo = useParagraphInfo()
 
+  //TODO is there a way besides 80vh?
   return (
-    <For each={chapterInfo()} fallback={<div>Select a Chapter</div>}>
-      {(info) => (
-        <div class=''>
-          <h1>{info.chapterNumber}</h1>
-          <h1>{info.chapterName}</h1>
-        </div>
+    <For each={paragraphInfo()}>
+      {(paragraph) => (
+        <p class='whitespace-pre-wrap w-screen max-w-[99vw] h-fit'>
+          {paragraph.paragraphText}
+        </p>
       )}
     </For>
   )
