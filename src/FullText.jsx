@@ -31,9 +31,9 @@ export const FullText = (props) => {
   }
 
   return (
-    <div class='flex flex-col flex-1 h-[83vh] max-h-[83vh] md:mx-2 w-fit'>
+    <div class='flex flex-col flex-1 h-[83vh] max-h-[83vh] md:mx-2'>
       <div
-        class='overflow-y-hidden flex flex-col flex-wrap flex-1 w-fit'
+        class='overflow-y-hidden flex flex-col flex-wrap flex-1 w-fit no-scrollbar'
         ref={myDiv}
       >
         <Show when={slider() <= 0}>
