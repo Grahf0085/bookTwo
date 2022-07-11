@@ -15,9 +15,21 @@ export const FullText = (props) => {
     setSlider(props.pageChange)
   })
 
+  createEffect(() => {
+    if (slider() >= 3) {
+      if (event.which === 37) {
+        scroll(-1504)
+      }
+      if (event.which === 39) {
+        scroll(1504)
+      }
+    }
+  })
+
   const scroll = (scrollOffset) => {
     myDiv.scrollLeft += scrollOffset
   }
+
   return (
     <div class='flex flex-col flex-1 h-[83vh] max-h-[83vh] md:mx-2 w-fit'>
       <div
@@ -35,8 +47,7 @@ export const FullText = (props) => {
           <Paragraphs pageNumber={slider() - 2} />
         </Show>
       </div>
-      <button onClick={() => scroll(-1504)}>LEFT</button>
-      <button onClick={() => scroll(1504)}>RIGHT</button>
+
       <Show when={bookSelected()}>
         <div class='w-full mt-auto flex justify-center'>
           <input

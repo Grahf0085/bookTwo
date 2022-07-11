@@ -29,6 +29,7 @@ function App() {
   }
 
   return (
+    // page change handled in App.jsx so that keyDowns work on all components
     <div
       tabIndex={-1}
       onKeyDown={() => handleKeyDown(event)}
