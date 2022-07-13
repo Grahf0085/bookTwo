@@ -1,4 +1,4 @@
-import { For } from 'solid-js'
+import { For, Show } from 'solid-js'
 import { useParagraphInfo } from '../providers/SelectedBookProvider.jsx'
 
 export const Paragraphs = (props) => {
@@ -8,9 +8,11 @@ export const Paragraphs = (props) => {
   return (
     <For each={paragraphInfo()}>
       {(paragraph) => (
-        <p class='whitespace-pre-wrap w-fit max-w-full min-w-full h-fit px-20 pb-2.5 pt-5'>
-          {props.chapter === paragraph.chapterNumber && paragraph.paragraphText}
-        </p>
+        <Show when={props.chapter === paragraph.chapterNumber}>
+          <p class='whitespace-pre-wrap w-fit max-w-full min-w-full h-fit px-20 pb-3'>
+            {paragraph.paragraphText}
+          </p>
+        </Show>
       )}
     </For>
   )

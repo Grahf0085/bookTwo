@@ -6,7 +6,7 @@ export const ChapterList = () => {
 
   return (
     <div class='h-full'>
-      <For each={chapterInfo()} fallback={<div>Select a Chapter</div>}>
+      <For each={chapterInfo()} fallback={<div>Select a Book</div>}>
         {(info) => (
           <>
             <h1>{info.chapterNumber}</h1>

@@ -8,10 +8,10 @@ export const Chapters = () => {
   const chapterInfo = useChapterInfo()
 
   return (
-    <For each={chapterInfo()}>
+    <For each={chapterInfo()} fallback={<div>Select a Book</div>}>
       {(chapter) => (
         <>
-          <h2>{chapter.chapterName}</h2>
+          <h2 class='px-20 pb-3'>{chapter.chapterName}</h2>
           <Paragraphs chapter={chapter.chapterNumber} />
         </>
       )}
