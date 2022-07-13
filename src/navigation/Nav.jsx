@@ -8,7 +8,7 @@ export const Nav = () => {
 
   return (
     <nav>
-      <div class='flex items-center justify-between bg-hooplaLighter rounded-sm md:mx-2 md:my-2 md:max-h-full max-h-12'>
+      <div class='flex items-center justify-between bg-hooplaLighter rounded-sm md:mx-2 md:mt-2 md:max-h-full max-h-12'>
         <div class='z-50 p-5 md:w-auto w-full flex justify-between'>
           <Link href='/'>
             <img

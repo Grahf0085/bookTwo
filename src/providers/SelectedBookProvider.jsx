@@ -24,7 +24,6 @@ export const SelectedBookProvider = (props) => {
 }
 
 export const useSelectedBook = () => {
-  // console.log('what im looking for: ', useContext(SelectedBookContext)[0])
   const selectedBook = useContext(SelectedBookContext)[0]
   return selectedBook
 }

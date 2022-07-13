@@ -1,8 +1,8 @@
 import { createSignal, createEffect, Show } from 'solid-js'
 import { useSelectedBook } from './providers/SelectedBookProvider.jsx'
 import { BookInfo } from './book-parts/BookInfo.jsx'
+import { ChapterList } from './book-parts/ChapterList.jsx'
 import { Chapters } from './book-parts/Chapters.jsx'
-import { Paragraphs } from './book-parts/Paragraphs.jsx'
 
 export const FullText = (props) => {
   const [slider, setSlider] = createSignal(0)
@@ -19,8 +19,8 @@ export const FullText = (props) => {
   createEffect(() => {
     if (slider() === 2 && event.which === 37) scroll(-screenWidth)
     if (slider() >= 3) {
-      if (event.which === 37) scroll(-screenWidth)
-      if (event.which === 39) scroll(screenWidth)
+      if (event.which === 37) scroll(-screenWidth - 3)
+      if (event.which === 39) scroll(screenWidth + 3)
     }
   })
 
@@ -39,10 +39,10 @@ export const FullText = (props) => {
         </Show>
 
         <Show when={slider() === 1}>
-          <Chapters />
+          <ChapterList />
         </Show>
         <Show when={slider() >= 2}>
-          <Paragraphs pageNumber={slider() - 2} />
+          <Chapters pageNumber={slider() - 2} />
         </Show>
       </div>
 

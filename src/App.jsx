@@ -20,12 +20,8 @@ function App() {
   }, '')
 
   const handleKeyDown = (event) => {
-    if (event.which === 37) {
-      setPageChange(pageChange() - 1)
-    }
-    if (event.which === 39) {
-      setPageChange(pageChange() + 1)
-    }
+    if (event.which === 37) setPageChange(pageChange() - 1)
+    if (event.which === 39) setPageChange(pageChange() + 1)
   }
 
   return (
