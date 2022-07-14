@@ -1,8 +1,8 @@
 import { For, Show } from 'solid-js'
-import { useParagraphInfo } from '../providers/SelectedBookProvider.jsx'
+import { createParagraphInfo } from '../providers/SelectedBookProvider.jsx'
 
 export const Paragraphs = (props) => {
-  const paragraphInfo = useParagraphInfo()
+  const paragraphInfo = createParagraphInfo()
 
   //TODO is there a way besides 80vh?
   return (

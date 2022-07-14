@@ -1,12 +1,12 @@
 import { For } from 'solid-js'
-import { useChapterInfo } from '../providers/SelectedBookProvider.jsx'
+import { createChapterInfo } from '../providers/SelectedBookProvider.jsx'
 
 export const ChapterList = () => {
-  const chapterInfo = useChapterInfo()
+  const chapterInfo = createChapterInfo()
 
   return (
-    <div class='h-full'>
-      <For each={chapterInfo()} fallback={<div>Select a Book</div>}>
+    <div class='w-full h-full'>
+      <For each={chapterInfo()}>
         {(info) => (
           <>
             <h1>{info.chapterNumber}</h1>

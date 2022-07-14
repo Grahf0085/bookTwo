@@ -1,5 +1,5 @@
 import { createSignal, createEffect } from 'solid-js'
-import { useSelectedBook } from './providers/SelectedBookProvider.jsx'
+import { createSelectedBook } from './providers/SelectedBookProvider.jsx'
 import { Nav } from './navigation/Nav.jsx'
 import { FullText } from './FullText.jsx'
 import { Footer } from './Footer.jsx'
@@ -7,10 +7,11 @@ import { Footer } from './Footer.jsx'
 function App() {
   const [pageChange, setPageChange] = createSignal(0)
 
-  const bookSelected = useSelectedBook()
+  const bookSelected = createSelectedBook()
 
   createEffect(() => {
     if (pageChange() <= 0) setPageChange(0)
+    //add value for max here. which is scrollWidth/screenWidth
   })
 
   createEffect((prev) => {

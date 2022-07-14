@@ -23,17 +23,17 @@ export const SelectedBookProvider = (props) => {
   )
 }
 
-export const useSelectedBook = () => {
+export const createSelectedBook = () => {
   const selectedBook = useContext(SelectedBookContext)[0]
   return selectedBook
 }
 
-export const useSetSelectedBook = () => {
+export const createSetSelectedBook = () => {
   const setSelectedBook = useContext(SelectedBookContext)[1]
   return setSelectedBook
 }
 
-export const useBookInfo = () => {
+export const createBookInfo = () => {
   const selectedBook = useContext(SelectedBookContext)[0]
 
   const [fetchedBookInfo] = createResource(selectedBook, fetchBookInfo)
@@ -41,7 +41,7 @@ export const useBookInfo = () => {
   return fetchedBookInfo
 }
 
-export const useChapterInfo = () => {
+export const createChapterInfo = () => {
   const selectedBook = useContext(SelectedBookContext)[0]
 
   const [fetchedBookChapters] = createResource(selectedBook, fetchBookChapters)
@@ -49,7 +49,7 @@ export const useChapterInfo = () => {
   return fetchedBookChapters
 }
 
-export const useParagraphInfo = () => {
+export const createParagraphInfo = () => {
   const selectedBook = useContext(SelectedBookContext)[0]
 
   const [fetchedBookParagraphs] = createResource(

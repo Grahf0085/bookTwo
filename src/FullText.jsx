@@ -1,5 +1,6 @@
 import { createSignal, createEffect, Show } from 'solid-js'
-import { useSelectedBook } from './providers/SelectedBookProvider.jsx'
+import { createSelectedBook } from './providers/SelectedBookProvider.jsx'
+import { createWindowDimensions } from './createWindowDimensions.jsx'
 import { BookInfo } from './book-parts/BookInfo.jsx'
 import { ChapterList } from './book-parts/ChapterList.jsx'
 import { Chapters } from './book-parts/Chapters.jsx'
@@ -7,58 +8,60 @@ import { Chapters } from './book-parts/Chapters.jsx'
 export const FullText = (props) => {
   const [slider, setSlider] = createSignal(0)
 
-  const bookSelected = useSelectedBook()
+  // const [scrollWidth, setScrollWidth] = createSignal()
 
-  let myDiv
-  const screenWidth = screen.width
+  const bookSelected = createSelectedBook()
+
+  let sliderDiv
+  // const screenWidth = screen.width
+  let windowWidth
+
+  createEffect(() => {
+    windowWidth = createWindowDimensions()
+  })
 
   createEffect(() => {
     setSlider(props.pageChange)
   })
 
-  createEffect(() => {
-    if (slider() === 2 && event.which === 37) scroll(-screenWidth)
-    if (slider() >= 3) {
-      if (event.which === 37) scroll(-screenWidth - 3)
-      if (event.which === 39) scroll(screenWidth + 3)
-    }
-  })
+  createEffect((prev) => {
+    let currentSlider = slider()
+    if (currentSlider <= 0) currentSlider = 0
+    if (prev <= 0) prev = 0
+    if (currentSlider > prev) scroll(windowWidth())
+    if (currentSlider < prev) scroll(-windowWidth())
+    return currentSlider
+  }, 0)
 
   const scroll = (scrollOffset) => {
-    myDiv.scrollLeft += scrollOffset
+    sliderDiv.scrollLeft += scrollOffset
   }
 
   return (
     <div class='flex flex-col h-[83vh] max-h-[83vh] w-screen'>
       <div
         class='overflow-y-hidden flex flex-col flex-wrap w-[100vw] max-w-[100vw] no-scrollbar'
-        ref={myDiv}
+        ref={sliderDiv}
       >
-        <Show when={slider() <= 0}>
-          <BookInfo />
-        </Show>
-
-        <Show when={slider() === 1}>
-          <ChapterList />
-        </Show>
-        <Show when={slider() >= 2}>
-          <Chapters pageNumber={slider() - 2} />
+        <Show when={bookSelected()} fallback={<div>Please Select A Book</div>}>
+          <>
+            <BookInfo />
+            <ChapterList />
+            <Chapters pageNumber={slider() - 2} />
+          </>
         </Show>
       </div>
 
-      <Show when={bookSelected()}>
-        <div class='w-full mt-auto flex justify-center'>
-          <input
-            type='range'
-            min='0'
-            max='100'
-            value={slider()}
-            onChange={() => setSlider(event.target.value)}
-            class='w-11/12'
-          />
-          <h1>{slider()}</h1>
-        </div>
-      </Show>
+      <div class='w-full mt-auto pt-8 flex justify-center'>
+        <input
+          type='range'
+          min='0'
+          value={slider()}
+          onChange={() => setSlider(event.target.value)}
+          class='w-11/12'
+        />
+        <h1>{slider()}</h1>
+      </div>
     </div>
   )
 }
