@@ -41,13 +41,14 @@ function App() {
     if (currentSlider > prev) scroll(windowWidth() * (currentSlider - prev))
     if (currentSlider < prev) scroll(-windowWidth() * (prev - currentSlider))
     return currentSlider
-  }, 0)
+  })
 
-  const handleKeyDown = (event) => {
+  const handleSliderChange = (event) => {
     if (event.which === 37 && pageChange() !== 0)
       setPageChange(pageChange() - 1)
-    if (event.which === 39 && pageChange() !== maxScroll)
+    if (event.which === 39 && pageChange() !== maxScroll) {
       setPageChange(pageChange() + 1)
+    }
   }
 
   const scroll = (scrollOffset) => {
@@ -57,7 +58,7 @@ function App() {
   return (
     <div
       tabIndex={-1}
-      onKeyDown={() => handleKeyDown(event)}
+      onKeyDown={() => handleSliderChange(event)}
       class='bg-hooplaBackground w-full h-full text-white flex flex-col'
     >
       <Nav />
@@ -68,7 +69,10 @@ function App() {
             ref={sliderRef}
             type='range'
             value={pageChange()}
-            onChange={() => setPageChange(event.target.value)}
+            onKeyDown={() => event.preventDefault()}
+            onChange={() => {
+              setPageChange(parseInt(event.target.value))
+            }}
             class='w-11/12'
           />
           <h1>{pageChange()}</h1>
