@@ -4,12 +4,14 @@ import { createParagraphInfo } from '../providers/SelectedBookProvider.jsx'
 export const Paragraphs = (props) => {
   const paragraphInfo = createParagraphInfo()
 
-  //TODO is there a way besides 80vh?
+  //TODO some paragraphs longer than window.....they don't wrap
+  //TODO spacing between paragraphs
+  //TODO chapters that end in letters not in right place
   return (
     <For each={paragraphInfo()}>
       {(paragraph) => (
         <Show when={props.chapter === paragraph.chapterNumber}>
-          <p class='whitespace-pre-wrap w-fit max-w-full min-w-full h-fit px-20 pb-3'>
+          <p class='whitespace-pre-wrap max-w-full min-w-full h-fit px-20'>
             {paragraph.paragraphText}
           </p>
         </Show>

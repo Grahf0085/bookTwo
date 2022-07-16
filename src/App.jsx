@@ -1,17 +1,33 @@
-import { createSignal, createEffect } from 'solid-js'
+import { createSignal, createEffect, Show } from 'solid-js'
+import { createWindowWidth } from './createWindowWidth.jsx'
 import { createSelectedBook } from './providers/SelectedBookProvider.jsx'
+import { createScrollWidth } from './createScrollWidth.jsx'
 import { Nav } from './navigation/Nav.jsx'
 import { FullText } from './FullText.jsx'
 import { Footer } from './Footer.jsx'
 
 function App() {
+  let sliderDivRef
+  let sliderRef
+  let windowWidth
+  let scrollWidth
+  let maxScroll
+
   const [pageChange, setPageChange] = createSignal(0)
 
   const bookSelected = createSelectedBook()
 
   createEffect(() => {
-    if (pageChange() <= 0) setPageChange(0)
-    //add value for max here. which is scrollWidth/screenWidth
+    windowWidth = createWindowWidth()
+  })
+
+  createEffect(() => {
+    if (bookSelected())
+      setTimeout(() => {
+        scrollWidth = createScrollWidth(sliderDivRef)
+        maxScroll = scrollWidth() / windowWidth() - 1
+        sliderRef.setAttribute('max', maxScroll)
+      }, 1000)
   })
 
   createEffect((prev) => {
@@ -21,20 +37,43 @@ function App() {
   }, '')
 
   const handleKeyDown = (event) => {
-    if (event.which === 37) setPageChange(pageChange() - 1)
-    if (event.which === 39) setPageChange(pageChange() + 1)
+    if (event.which === 37 && pageChange() !== 0)
+      setPageChange(pageChange() - 1)
+    if (event.which === 39 && pageChange() !== maxScroll)
+      setPageChange(pageChange() + 1)
+  }
+
+  createEffect((prev) => {
+    let currentSlider = pageChange()
+    if (currentSlider > prev) scroll(windowWidth())
+    if (currentSlider < prev) scroll(-windowWidth())
+    return currentSlider
+  }, 0)
+
+  const scroll = (scrollOffset) => {
+    sliderDivRef.scrollLeft += scrollOffset
   }
 
   return (
-    // page change handled in App.jsx so that keyDowns work on all components
     <div
       tabIndex={-1}
       onKeyDown={() => handleKeyDown(event)}
-      class='bg-hooplaBackground w-full min-h-[99vh] text-white flex flex-col' //TODO check for another way besides 99vh
+      class='bg-hooplaBackground w-full h-full text-white flex flex-col'
     >
       <Nav />
-      <FullText pageChange={pageChange()} />
-      <Footer />
+      <FullText page={pageChange()} ref={sliderDivRef} />
+      <Show when={bookSelected()} fallback={<Footer />}>
+        <div class='flex justify-center'>
+          <input
+            ref={sliderRef}
+            type='range'
+            value={pageChange()}
+            onChange={() => setPageChange(event.target.value)}
+            class={`w-11/12 ${bookSelected() ? 'visible' : 'invisible'}`}
+          />
+          <h1>{pageChange()}</h1>
+        </div>
+      </Show>
     </div>
   )
 }
