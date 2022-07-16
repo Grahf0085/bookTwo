@@ -8,7 +8,7 @@ export const FullText = (props) => {
   const bookSelected = createSelectedBook()
 
   return (
-    <div class='flex flex-col h-[83vh] max-h-[83vh] w-screen'>
+    <div class='flex flex-col h-[83vh] max-h-[83vh] w-screen pointer-events-none'>
       <div
         class='overflow-y-hidden flex flex-col flex-wrap w-[100vw] max-w-[100vw] no-scrollbar'
         ref={props.ref}

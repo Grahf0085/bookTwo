@@ -36,19 +36,19 @@ function App() {
     return book
   }, '')
 
+  createEffect((prev) => {
+    let currentSlider = pageChange()
+    if (currentSlider > prev) scroll(windowWidth() * (currentSlider - prev))
+    if (currentSlider < prev) scroll(-windowWidth() * (prev - currentSlider))
+    return currentSlider
+  }, 0)
+
   const handleKeyDown = (event) => {
     if (event.which === 37 && pageChange() !== 0)
       setPageChange(pageChange() - 1)
     if (event.which === 39 && pageChange() !== maxScroll)
       setPageChange(pageChange() + 1)
   }
-
-  createEffect((prev) => {
-    let currentSlider = pageChange()
-    if (currentSlider > prev) scroll(windowWidth())
-    if (currentSlider < prev) scroll(-windowWidth())
-    return currentSlider
-  }, 0)
 
   const scroll = (scrollOffset) => {
     sliderDivRef.scrollLeft += scrollOffset
@@ -69,7 +69,7 @@ function App() {
             type='range'
             value={pageChange()}
             onChange={() => setPageChange(event.target.value)}
-            class={`w-11/12 ${bookSelected() ? 'visible' : 'invisible'}`}
+            class='w-11/12'
           />
           <h1>{pageChange()}</h1>
         </div>
