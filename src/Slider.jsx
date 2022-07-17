@@ -2,6 +2,7 @@ import { createEffect, Show } from 'solid-js'
 import { createSelectedBook } from './providers/SelectedBookProvider.jsx'
 import { createWindowWidth } from './createWindowWidth.jsx'
 import { createScrollWidth } from './createScrollWidth.jsx'
+import { Footer } from './Footer.jsx'
 
 export const Slider = (props) => {
   let sliderRef
@@ -26,7 +27,6 @@ export const Slider = (props) => {
       setTimeout(() => {
         scrollWidth = createScrollWidth(props.fullTextRef)
         maxScroll = scrollWidth() / windowWidth() - 1
-        props.onMaxScrollChange(maxScroll)
         sliderRef.setAttribute('max', maxScroll)
       }, 1000)
   })
@@ -42,8 +42,22 @@ export const Slider = (props) => {
     props.fullTextRef.scrollLeft += scrollOffset
   }
 
+  const handleSliderChange = (event) => {
+    if (event.which === 37 && props.page !== 0)
+      props.onPageChange(props.page - 1)
+    if (event.which === 39 && props.page !== maxScroll) {
+      props.onPageChange(props.page + 1)
+    }
+  }
+
+  createEffect(() => {
+    props.rootDivRef.addEventListener('keydown', () =>
+      handleSliderChange(event)
+    )
+  })
+
   return (
-    <Show when={bookSelected()}>
+    <Show when={bookSelected()} fallback={<Footer />}>
       <div class='flex justify-center'>
         <input
           ref={sliderRef}
