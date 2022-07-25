@@ -1,11 +1,11 @@
-import { For } from 'solid-js'
-import { createBookInfo } from '../providers/SelectedBookProvider.jsx'
+import { createResource, For } from 'solid-js'
+import { fetchBookInfo } from '../utils/nietzscheAPI.js'
 
-export const BookInfo = () => {
-  const bookInfo = createBookInfo()
+export const BookInfo = (props) => {
+  const [fetchedBookInfo] = createResource(() => props.book, fetchBookInfo)
 
   return (
-    <For each={bookInfo()}>
+    <For each={fetchedBookInfo()}>
       {(info) => (
         <div class='w-full h-full'>
           <h1>{info.title}</h1>

@@ -1,18 +1,20 @@
-//TODO get page number from props(already passed down)
-
-import { For } from 'solid-js'
+import { createResource, For } from 'solid-js'
+import { fetchBookChapters } from '../utils/nietzscheAPI.js'
 import { Paragraphs } from './Paragraphs.jsx'
-import { createChapterInfo } from '../providers/SelectedBookProvider.jsx'
 
-export const Chapters = () => {
-  const chapterInfo = createChapterInfo()
+export const Chapters = (props) => {
+  const [fetchedBookChapters] = createResource(
+    () => props.book,
+    fetchBookChapters
+  )
 
   return (
-    <For each={chapterInfo()}>
+    <For each={fetchedBookChapters()}>
       {(chapter) => (
         <>
           <h2 class='px-20 pb-3'>{chapter.chapterName}</h2>
-          <Paragraphs chapter={chapter.chapterNumber} />
+          <Paragraphs chapterNumber={chapter.chapterNumber} book={props.book} />
+          <div class='h-full' />
         </>
       )}
     </For>

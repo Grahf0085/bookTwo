@@ -1,16 +1,14 @@
 import { For, createSignal, createResource, onMount } from 'solid-js'
-import { fetchTitles, fetchTranslators } from '../../nietzscheAPI.js'
-import { createSetSelectedBook } from '../providers/SelectedBookProvider.jsx'
+import { Link } from 'solid-app-router'
+import { fetchTitles, fetchTranslators } from '../utils/nietzscheAPI.js'
 
 export const NavLinks = () => {
-  const [heading, setHeading] = createSignal('') //needs passed up to app for selected book title on mobile
+  const [heading, setHeading] = createSignal('')
   const [titles, setTitles] = createSignal([])
-  const [hovered, setHovered] = createSignal('') //needs passed up to app for selected book title
+  const [hoveredTranslator, setHoveredTranslator] = createSignal('')
 
-  const [translators] = createResource(hovered, fetchTranslators)
+  const [translators] = createResource(hoveredTranslator, fetchTranslators)
   const [mobileTranslators] = createResource(heading, fetchTranslators)
-
-  const setSelectedBook = createSetSelectedBook()
 
   onMount(async () => {
     const res = await fetchTitles()
@@ -18,7 +16,7 @@ export const NavLinks = () => {
   })
 
   const handleMouseHover = (title) => {
-    setHovered(title)
+    setHoveredTranslator(title)
   }
 
   return (
@@ -52,16 +50,14 @@ export const NavLinks = () => {
                 <li class='px-4 invisible h-0 font-rubik'>{title.title}</li>
                 <For each={translators()}>
                   {(translator) => (
-                    <li
-                      onClick={() => {
-                        setSelectedBook(
-                          `${hovered()}+${translator.translatorName}`
-                        )
-                      }}
-                      class=' cursor-pointer font-rubik text-sm text-linkHover my-2.5 hidden group-hover:md:block hover:md:block md:my-0 p-3'
+                    <Link
+                      href={`/book/${
+                        translator.translatorName
+                      }/${hoveredTranslator()}/0`}
+                      class='cursor-pointer font-rubik text-sm text-linkHover my-2.5 hidden group-hover:md:block hover:md:block md:my-0 p-3'
                     >
                       {translator.translatorName}
-                    </li>
+                    </Link>
                   )}
                 </For>
               </ul>
@@ -75,16 +71,14 @@ export const NavLinks = () => {
                   fallback={<div>Loading...</div>}
                 >
                   {(translator) => (
-                    <li
-                      onClick={() =>
-                        setSelectedBook(
-                          `${hovered()}+${translator.translatorName}`
-                        )
-                      }
+                    <Link
+                      href={`/book/${
+                        translator.translatorName
+                      }/${hoveredTranslator()}/0`}
                       class='font-rubik text-sm text-linkHover bg-hooplaBackground py-4 pl-7'
                     >
                       {translator.translatorName}
-                    </li>
+                    </Link>
                   )}
                 </For>
               </ul>

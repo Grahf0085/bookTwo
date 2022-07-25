@@ -1,12 +1,15 @@
-import { For } from 'solid-js'
-import { createChapterInfo } from '../providers/SelectedBookProvider.jsx'
+import { createResource, For } from 'solid-js'
+import { fetchBookChapters } from '../utils/nietzscheAPI.js'
 
-export const ChapterList = () => {
-  const chapterInfo = createChapterInfo()
+export const ChapterList = (props) => {
+  const [fetchedChapterInfo] = createResource(
+    () => props.book,
+    fetchBookChapters
+  )
 
   return (
     <div class='w-full h-full'>
-      <For each={chapterInfo()}>
+      <For each={fetchedChapterInfo()}>
         {(info) => (
           <>
             <h1>{info.chapterNumber}</h1>

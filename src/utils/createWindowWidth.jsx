@@ -1,3 +1,5 @@
+//TODO what about height resize?
+
 import { createSignal, createEffect } from 'solid-js'
 
 const getWindowWidth = () => {

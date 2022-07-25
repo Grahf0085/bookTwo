@@ -1,32 +1,31 @@
-import { createSignal } from 'solid-js'
+import { Route, Routes } from 'solid-app-router'
 import { Nav } from './navigation/Nav.jsx'
+import { Home } from './Home.jsx'
 import { FullText } from './FullText.jsx'
-import { Slider } from './Slider.jsx'
 
 function App() {
-  let fullTextRef
   let rootDivRef
-
-  const [pageChange, setPageChange] = createSignal(0)
-
-  const handleChangePage = (page) => {
-    setPageChange(page)
-  }
 
   return (
     <div
       ref={rootDivRef}
       tabIndex={-1}
-      class='bg-hooplaBackground w-full h-full text-white flex flex-col'
+      class='bg-hooplaBackground w-full h-full text-white flex flex-col p-0 m-0'
     >
       <Nav />
-      <FullText page={pageChange()} ref={fullTextRef} />
-      <Slider
-        fullTextRef={fullTextRef}
-        page={pageChange()}
-        onPageChange={handleChangePage}
-        rootDivRef={rootDivRef}
-      />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/book'>
+          <Route path='/:translator'>
+            <Route path='/:title'>
+              <Route
+                path='/:chapter'
+                element={<FullText rootDivRef={rootDivRef} />}
+              />
+            </Route>
+          </Route>
+        </Route>
+      </Routes>
     </div>
   )
 }
