@@ -5,9 +5,9 @@ import { fetchTitles, fetchTranslators } from '../utils/nietzscheAPI.js'
 export const NavLinks = () => {
   const [heading, setHeading] = createSignal('')
   const [titles, setTitles] = createSignal([])
-  const [hoveredTranslator, setHoveredTranslator] = createSignal('')
+  const [hoveredBook, setHoveredBook] = createSignal('')
 
-  const [translators] = createResource(hoveredTranslator, fetchTranslators)
+  const [translators] = createResource(hoveredBook, fetchTranslators)
   const [mobileTranslators] = createResource(heading, fetchTranslators)
 
   onMount(async () => {
@@ -16,7 +16,7 @@ export const NavLinks = () => {
   })
 
   const handleMouseHover = (title) => {
-    setHoveredTranslator(title)
+    setHoveredBook(title)
   }
 
   return (
@@ -53,7 +53,7 @@ export const NavLinks = () => {
                     <Link
                       href={`/book/${
                         translator.translatorName
-                      }/${hoveredTranslator()}/0`}
+                      }/${hoveredBook()}/Title`}
                       class='cursor-pointer font-rubik text-sm text-linkHover my-2.5 hidden group-hover:md:block hover:md:block md:my-0 p-3'
                     >
                       {translator.translatorName}
@@ -74,7 +74,7 @@ export const NavLinks = () => {
                     <Link
                       href={`/book/${
                         translator.translatorName
-                      }/${hoveredTranslator()}/0`}
+                      }/${hoveredBook()}/0`}
                       class='font-rubik text-sm text-linkHover bg-hooplaBackground py-4 pl-7'
                     >
                       {translator.translatorName}

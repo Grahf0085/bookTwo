@@ -18,6 +18,7 @@ export const FullText = (props) => {
     setBook(paramsBook)
   })
 
+  //pointer-events-none
   return (
     <div class='flex flex-col h-[88vh] max-h-[88vh] min-h-[88vh] w-screen pointer-events-none'>
       <div
@@ -26,7 +27,7 @@ export const FullText = (props) => {
       >
         <>
           <BookInfo book={book()} />
-          <ChapterList book={book()} />
+          <ChapterList book={book()} fullTextRef={fullTextRef} />
           <Chapters book={book()} />
         </>
       </div>

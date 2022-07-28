@@ -14,6 +14,10 @@ export const Slider = (props) => {
     props.rootDivRef.focus()
   })
 
+  createEffect(() => {
+    props.rootDivRef.focus()
+  })
+
   createEffect((prev) => {
     const book = props.book
     if (book() !== prev) {

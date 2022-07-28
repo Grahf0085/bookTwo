@@ -1,4 +1,5 @@
 import { createResource, For, Show } from 'solid-js'
+// import { useNavigate, useParams } from 'solid-app-rout/*  */er'
 import { fetchBookParagraphs } from '../utils/nietzscheAPI.js'
 
 export const Paragraphs = (props) => {
@@ -6,6 +7,17 @@ export const Paragraphs = (props) => {
     () => props.book,
     fetchBookParagraphs
   )
+
+  // const navigate = useNavigate()
+  // const params = useParams()
+
+  // createEffect((prev) => {
+  //   if (prev !== props.chapterNumber) {
+  //     navigate(
+  //       `/book/${params.translator}/${params.title}/${props.chapterNumber}`
+  //     )
+  //   }
+  // })
 
   //TODO some paragraphs longer than window.....they don't wrap
   //TODO spacing between paragraphs
