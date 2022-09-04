@@ -48,7 +48,8 @@ export const Slider = (props) => {
     createEffect(() => {
       setTimeout(() => {
         scrollWidth = createScrollWidth(props.fullTextRef)
-        setMaxScroll(Math.ceil(scrollWidth() / windowWidth() - 1))
+        console.log('scroll width inside cliser is: ', scrollWidth())
+        setMaxScroll(Math.ceil(scrollWidth() / windowWidth() - 1)) //look at this for jumping to chapters and setting scroller
         sliderRef.setAttribute('max', maxScroll())
       }, 500)
     })

@@ -1,26 +1,25 @@
-import { createResource, createEffect, For } from 'solid-js'
+import { createResource, For } from 'solid-js'
 import { fetchBookChapters } from '../utils/nietzscheAPI.js'
-import { createWindowWidth } from '../utils/createWindowWidth.jsx'
+import { createScrollWidth } from '../utils/createScrollWidth.jsx'
 
 export const ChapterList = (props) => {
-  let windowWidth
+  let scrollWidth
 
   const [fetchedChapterInfo] = createResource(
     () => props.book,
     fetchBookChapters
   )
 
-  createEffect(() => {
-    windowWidth = createWindowWidth()
-  })
-
   const handleChapterLink = (chapterNumber) => {
     document
       .getElementById(chapterNumber)
       .scrollIntoView({ behavior: 'smooth' })
     setTimeout(() => {
-      console.log(windowWidth)
+      scrollWidth = createScrollWidth(props.fullTextRef)
+      console.log('scroll width inside chapter list is: ', scrollWidth())
       console.log('scroll left', props.fullTextRef.scrollLeft)
+      console.log('testing thing is: ', (props.fullTextRef.scrollLeft + 1803) / scrollWidth())
+      console.log('another testing this:', props.fullTextRef.scrollLeft)
     }, 200)
   }
 
