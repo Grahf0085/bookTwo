@@ -13,14 +13,13 @@ export const ChapterList = (props) => {
   const handleChapterLink = (chapterNumber) => {
     document
       .getElementById(chapterNumber)
-      .scrollIntoView({ behavior: 'smooth' })
+      .scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     setTimeout(() => {
       scrollWidth = createScrollWidth(props.fullTextRef)
-      console.log('scroll width inside chapter list is: ', scrollWidth())
-      console.log('scroll left', props.fullTextRef.scrollLeft)
-      console.log('testing thing is: ', (props.fullTextRef.scrollLeft + 1803) / scrollWidth())
-      console.log('another testing this:', props.fullTextRef.scrollLeft)
-    }, 200)
+      const totalWidth = scrollWidth() - window.innerWidth
+      const percentScrolled = props.fullTextRef.scrollLeft / totalWidth * 100
+      props.setPercentScrolledToChapter(percentScrolled)
+    }, 500)
   }
 
   return (
@@ -40,5 +39,3 @@ export const ChapterList = (props) => {
     </div>
   )
 }
-
-//instead of doing For each tie render of chapter to onclick from slider. if at last page of chapter make new chapter

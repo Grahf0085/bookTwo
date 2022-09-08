@@ -11,6 +11,7 @@ export const FullText = (props) => {
   let fullTextRef
 
   const [book, setBook] = createSignal()
+  const [percentScrolledToChapter, setPercentScrolledToChapter] = createSignal()
 
   createEffect(() => {
     params = useParams()
@@ -18,7 +19,6 @@ export const FullText = (props) => {
     setBook(paramsBook)
   })
 
-  //pointer-events-none
   return (
     <div class='flex flex-col h-[88vh] max-h-[88vh] min-h-[88vh] w-screen pointer-events-none'>
       <div
@@ -27,7 +27,7 @@ export const FullText = (props) => {
       >
         <>
           <BookInfo book={book()} />
-          <ChapterList book={book()} fullTextRef={fullTextRef} />
+          <ChapterList book={book()} fullTextRef={fullTextRef} setPercentScrolledToChapter={setPercentScrolledToChapter} />
           <Chapters book={book()} />
         </>
       </div>
@@ -35,6 +35,7 @@ export const FullText = (props) => {
         fullTextRef={fullTextRef}
         rootDivRef={props.rootDivRef}
         book={book}
+        percentScrolledToChapter={percentScrolledToChapter()}
       />
     </div>
   )

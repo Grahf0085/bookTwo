@@ -9,6 +9,7 @@ export const Slider = (props) => {
 
   const [page, setPage] = createSignal(0)
   const [maxScroll, setMaxScroll] = createSignal(0)
+  const [chapterClicked, setChapterClicked] = createSignal(false)
 
   onMount(() => {
     props.rootDivRef.focus()
@@ -20,11 +21,12 @@ export const Slider = (props) => {
 
   createEffect((prev) => {
     const book = props.book
-    if (book() !== prev) {
-      setPage(0)
-      setMaxPages()
-    }
-    return book()
+      if (book() !== prev) {
+        setChapterClicked(false)
+        setPage(0)
+        setMaxPages()
+      }
+      return book()
   }, '')
 
   createEffect(() => {
@@ -33,9 +35,18 @@ export const Slider = (props) => {
 
   createEffect((prev) => {
     const currentSlider = page()
-    if (currentSlider > prev) scroll(windowWidth() * (currentSlider - prev))
-    if (currentSlider < prev) scroll(-windowWidth() * (prev - currentSlider))
+    if (currentSlider > prev && chapterClicked() === false) scroll(windowWidth() * (currentSlider - prev))
+    if (currentSlider < prev && chapterClicked() === false) scroll(-windowWidth() * (prev - currentSlider))
     return currentSlider
+  })
+
+  createEffect((prev) => {
+    const currentChapter = props.percentScrolledToChapter
+    if (currentChapter !== prev) {
+      setChapterClicked(true)
+      setPage(Math.ceil(maxScroll() * (props.percentScrolledToChapter / 100)))
+    }
+    return currentChapter
   })
 
   createEffect(() => {
@@ -48,8 +59,7 @@ export const Slider = (props) => {
     createEffect(() => {
       setTimeout(() => {
         scrollWidth = createScrollWidth(props.fullTextRef)
-        console.log('scroll width inside cliser is: ', scrollWidth())
-        setMaxScroll(Math.ceil(scrollWidth() / windowWidth() - 1)) //look at this for jumping to chapters and setting scroller
+        setMaxScroll(Math.ceil(scrollWidth() / windowWidth() - 1))
         sliderRef.setAttribute('max', maxScroll())
       }, 500)
     })
@@ -60,8 +70,14 @@ export const Slider = (props) => {
   }
 
   const handleSliderChange = (event) => {
-    if (event.which === 37 && page() !== 0) setPage(page() - 1)
-    if (event.which === 39 && page() !== maxScroll()) setPage(page() + 1)
+    if (event.which === 37 && page() !== 0)  {
+      setChapterClicked(false)
+      setPage(page() - 1)
+    }
+    if (event.which === 39 && page() !== maxScroll()) { 
+      setChapterClicked(false)
+      setPage(page() + 1)
+    }
   }
 
   return (
