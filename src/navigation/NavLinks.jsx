@@ -2,7 +2,7 @@ import { For, createSignal, createResource, onMount } from 'solid-js'
 import { Link } from 'solid-app-router'
 import { fetchTitles, fetchTranslators } from '../utils/nietzscheAPI.js'
 
-export const NavLinks = () => {
+export const NavLinks = (props) => {
   const [heading, setHeading] = createSignal('')
   const [titles, setTitles] = createSignal([])
   const [hoveredBook, setHoveredBook] = createSignal('')
@@ -29,7 +29,7 @@ export const NavLinks = () => {
               onMouseOver={[handleMouseHover, title.title]}
             >
               <h1
-                class='md:cursor-pointer whitespace-nowrap font-rubik py-3 flex justify-between items-center px-4 bg-hooplaBackground md:bg-hooplaLighter rounded-sm md:border-dotted md:border-b-2 group-hover:border-solid group-hover:border-linkHover group-hover:bg-hooplaBackground'
+                class={`md:cursor-pointer whitespace-nowrap font-rubik py-3 flex justify-between items-center px-4 bg-hooplaBackground md:bg-hooplaLighter rounded-sm md:border-b-2 group-hover:border-solid group-hover:border-linkHover group-hover:bg-hooplaBackground ${props.selectedTitle === title.title ? 'md:border-solid border-linkHover' : 'md:border-dotted'}`}
                 onClick={() => {
                   heading() !== title.title
                     ? setHeading(title.title)

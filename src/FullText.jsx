@@ -17,6 +17,7 @@ export const FullText = (props) => {
     params = useParams()
     paramsBook = params.title + '+' + params.translator
     setBook(paramsBook)
+    props.setSelectedTitle(params.title)
   })
 
   return (

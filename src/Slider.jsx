@@ -81,7 +81,7 @@ export const Slider = (props) => {
   }
 
   return (
-    <div class='grid grid-cols-1 gap-5 w-11/12 self-center py-5 mt-auto'>
+    <div class='grid grid-cols-1 gap-5 w-11/12 self-center py-5 mt-auto pointer-events-auto'>
       <input
         ref={sliderRef}
         type='range'

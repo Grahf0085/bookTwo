@@ -3,7 +3,7 @@ import { Link } from 'solid-app-router'
 import { NavLinks } from './NavLinks.jsx'
 import face from '../assets/face.png'
 
-export const Nav = () => {
+export const Nav = (props) => {
   const [open, setOpen] = createSignal(false)
 
   return (
@@ -28,7 +28,7 @@ export const Nav = () => {
           </div>
         </div>
         <ul class='md:flex md:w-full md:justify-center hidden items-center'>
-          <NavLinks />
+          <NavLinks selectedTitle={props.selectedTitle} />
         </ul>
         {/* Mobile */}
         <ul

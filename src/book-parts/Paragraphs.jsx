@@ -23,6 +23,7 @@ export const Paragraphs = (props) => {
   //TODO spacing between paragraphs
   //TODO chapters that end in letters not in right place
   //TODO disable search with browser search function
+  //TODO BGE bug that splits page
   return (
     <For each={fetchedBookParagraphs()}>
       {(paragraph) => (
