@@ -1,5 +1,5 @@
 import { createSignal } from 'solid-js'
-import { Route, Routes } from 'solid-app-router'
+import { Route, Routes, Navigate } from 'solid-app-router'
 import { Nav } from './navigation/Nav.jsx'
 import { Home } from './Home.jsx'
 import { FullText } from './FullText.jsx'
@@ -8,6 +8,10 @@ function App() {
   let rootDivRef
 
   const [selectedTitle, setSelectedTitle] = createSignal()
+
+  function getPath() {
+    return '/'
+  }
 
   return (
     <div
@@ -35,6 +39,9 @@ function App() {
               />
             </Route>
           </Route>
+        </Route>
+        <Route path='/redirect'>
+          <Navigate href={getPath} />
         </Route>
       </Routes>
     </div>
