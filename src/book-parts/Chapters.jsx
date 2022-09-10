@@ -20,7 +20,7 @@ export const Chapters = (props) => {
     <For each={fetchedBookChapters()}>
       {(chapter) => (
         <>
-          <h2 id={chapter.chapterNumber} class='px-20 pb-3'>
+          <h2 id={chapter.chapterNumber} class='px-20 font-semibold'>
             {chapter.chapterName}
           </h2>
           <Paragraphs chapterNumber={chapter.chapterNumber} book={props.book} />

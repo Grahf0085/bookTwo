@@ -20,7 +20,6 @@ export const Paragraphs = (props) => {
   // })
 
   //TODO some paragraphs longer than window.....they don't wrap
-  //TODO spacing between paragraphs
   //TODO chapters that end in letters not in right place
   //TODO disable search with browser search function
   //TODO BGE bug that splits page
@@ -28,7 +27,7 @@ export const Paragraphs = (props) => {
     <For each={fetchedBookParagraphs()}>
       {(paragraph) => (
         <Show when={props.chapterNumber === paragraph.chapterNumber}>
-          <p class='whitespace-pre-wrap max-w-full min-w-full h-fit px-20'>
+          <p class='whitespace-pre-wrap max-w-full min-w-full h-fit px-20 py-2'>
             {paragraph.paragraphText}
           </p>
         </Show>
