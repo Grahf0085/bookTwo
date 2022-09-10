@@ -21,12 +21,12 @@ export const Slider = (props) => {
 
   createEffect((prev) => {
     const book = props.book
-      if (book() !== prev) {
-        setChapterClicked(false)
-        setPage(0)
-        setMaxPages()
-      }
-      return book()
+    if (book() !== prev) {
+      setChapterClicked(false)
+      setPage(0)
+      setMaxPages()
+    }
+    return book()
   }, '')
 
   createEffect(() => {
@@ -35,8 +35,10 @@ export const Slider = (props) => {
 
   createEffect((prev) => {
     const currentSlider = page()
-    if (currentSlider > prev && chapterClicked() === false) scroll(windowWidth() * (currentSlider - prev))
-    if (currentSlider < prev && chapterClicked() === false) scroll(-windowWidth() * (prev - currentSlider))
+    if (currentSlider > prev && chapterClicked() === false)
+      scroll(windowWidth() * (currentSlider - prev))
+    if (currentSlider < prev && chapterClicked() === false)
+      scroll(-windowWidth() * (prev - currentSlider))
     return currentSlider
   })
 
@@ -70,11 +72,11 @@ export const Slider = (props) => {
   }
 
   const handleSliderChange = (event) => {
-    if (event.which === 37 && page() !== 0)  {
+    if (event.which === 37 && page() !== 0) {
       setChapterClicked(false)
       setPage(page() - 1)
     }
-    if (event.which === 39 && page() !== maxScroll()) { 
+    if (event.which === 39 && page() !== maxScroll()) {
       setChapterClicked(false)
       setPage(page() + 1)
     }

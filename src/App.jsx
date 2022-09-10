@@ -23,7 +23,12 @@ function App() {
             <Route path='/:title'>
               <Route
                 path='/:chapter'
-                element={<FullText rootDivRef={rootDivRef} setSelectedTitle={setSelectedTitle} />}
+                element={
+                  <FullText
+                    rootDivRef={rootDivRef}
+                    setSelectedTitle={setSelectedTitle}
+                  />
+                }
               />
             </Route>
           </Route>

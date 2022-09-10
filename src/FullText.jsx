@@ -28,7 +28,11 @@ export const FullText = (props) => {
       >
         <>
           <BookInfo book={book()} />
-          <ChapterList book={book()} fullTextRef={fullTextRef} setPercentScrolledToChapter={setPercentScrolledToChapter} />
+          <ChapterList
+            book={book()}
+            fullTextRef={fullTextRef}
+            setPercentScrolledToChapter={setPercentScrolledToChapter}
+          />
           <Chapters book={book()} />
         </>
       </div>

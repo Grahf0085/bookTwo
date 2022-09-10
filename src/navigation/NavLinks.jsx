@@ -29,7 +29,11 @@ export const NavLinks = (props) => {
               onMouseOver={[handleMouseHover, title.title]}
             >
               <h1
-                class={`md:cursor-pointer whitespace-nowrap font-rubik py-3 flex justify-between items-center px-4 bg-hooplaBackground md:bg-hooplaLighter rounded-sm md:border-b-2 group-hover:border-solid group-hover:border-linkHover group-hover:bg-hooplaBackground ${props.selectedTitle === title.title ? 'md:border-solid border-linkHover' : 'md:border-dotted'}`}
+                class={`md:cursor-pointer whitespace-nowrap font-rubik py-3 flex justify-between items-center px-4 bg-hooplaBackground md:bg-hooplaLighter rounded-sm md:border-b-2 group-hover:border-solid group-hover:border-linkHover group-hover:bg-hooplaBackground ${
+                  props.selectedTitle === title.title
+                    ? 'md:border-solid border-linkHover'
+                    : 'md:border-dotted'
+                }`}
                 onClick={() => {
                   heading() !== title.title
                     ? setHeading(title.title)
