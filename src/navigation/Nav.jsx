@@ -15,6 +15,7 @@ export const Nav = (props) => {
               src={face}
               alt='Nietzsche'
               class='md:h-14 md:w-14 md:cursor-pointer rounded-full h-10 w-10'
+              onClick={() => props.setSelectedTitle(null)}
             />
           </Link>
           <div

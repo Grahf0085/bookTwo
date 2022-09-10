@@ -15,7 +15,10 @@ function App() {
       tabIndex={-1}
       class='bg-hooplaBackground w-full h-full text-white flex flex-col p-0 m-0'
     >
-      <Nav selectedTitle={selectedTitle()} />
+      <Nav
+        selectedTitle={selectedTitle()}
+        setSelectedTitle={setSelectedTitle}
+      />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/book'>
