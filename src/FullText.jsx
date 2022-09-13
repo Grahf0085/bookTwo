@@ -13,6 +13,7 @@ export const FullText = (props) => {
   const [book, setBook] = createSignal()
   const [percentScrolledToChapter, setPercentScrolledToChapter] = createSignal()
 
+  //TODO intsead of passing book as props have each section use useParams()?
   createEffect(() => {
     params = useParams()
     paramsBook = params.title + '+' + params.translator

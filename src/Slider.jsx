@@ -90,6 +90,7 @@ export const Slider = (props) => {
         value={page()}
         onKeyDown={() => event.preventDefault()}
         onChange={() => {
+          setChapterClicked(false)
           setPage(parseInt(event.target.value))
         }}
         class='w-full'

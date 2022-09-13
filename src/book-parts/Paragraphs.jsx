@@ -1,11 +1,11 @@
-import { createResource, For, Show } from 'solid-js'
+import { createResource, For } from 'solid-js'
 // import { useNavigate, useParams } from 'solid-app-rout/*  */er'
-import { fetchBookParagraphs } from '../utils/nietzscheAPI.js'
+import { fetchChapterParagraphs } from '../utils/nietzscheAPI.js'
 
 export const Paragraphs = (props) => {
-  const [fetchedBookParagraphs] = createResource(
-    () => props.book,
-    fetchBookParagraphs
+  const [fetchedChapterParagraphs] = createResource(
+    () => [props.book, props.chapterNumber],
+    fetchChapterParagraphs
   )
 
   // const navigate = useNavigate()
@@ -22,15 +22,13 @@ export const Paragraphs = (props) => {
   //TODO some paragraphs longer than window.....they don't wrap
   //TODO chapters that end in letters not in right place
   //TODO disable search with browser search function
-  //TODO BGE bug that splits page
+
   return (
-    <For each={fetchedBookParagraphs()}>
+    <For each={fetchedChapterParagraphs()}>
       {(paragraph) => (
-        <Show when={props.chapterNumber === paragraph.chapterNumber}>
-          <p class='whitespace-pre-wrap max-w-full min-w-full h-fit px-20 py-2'>
-            {paragraph.paragraphText}
-          </p>
-        </Show>
+        <p class='whitespace-pre-wrap max-w-full min-w-full h-fit px-20 py-2'>
+          {paragraph.paragraphText}
+        </p>
       )}
     </For>
   )

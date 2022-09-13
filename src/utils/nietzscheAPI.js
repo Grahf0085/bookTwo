@@ -28,11 +28,14 @@ export const fetchBookChapters = async (book) => {
   return results
 }
 
-export const fetchBookParagraphs = async (book) => {
+export const fetchChapterParagraphs = async (bookAndChapter) => {
+  const book = bookAndChapter[0]
+  const chapter = bookAndChapter[1]
+
   if (book.trim() === '') return []
 
   const response = await fetch(
-    `http://localhost:1844/api/paragraphs-info/${book}`
+    `http://localhost:1844/api/paragraphs-info/${book}/${chapter}`
   )
   const results = await response.json()
   return results
