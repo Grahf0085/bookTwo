@@ -6,18 +6,17 @@ import { Chapters } from './book-parts/Chapters.jsx'
 import { Slider } from './Slider.jsx'
 
 export const FullText = (props) => {
-  let params
-  let paramsBook
   let fullTextRef
 
-  const [book, setBook] = createSignal()
   const [percentScrolledToChapter, setPercentScrolledToChapter] = createSignal()
+  const [title, setTitle] = createSignal()
+  const [translator, setTranslator] = createSignal()
 
   //TODO intsead of passing book as props have each section use useParams()?
   createEffect(() => {
-    params = useParams()
-    paramsBook = params.title + '+' + params.translator
-    setBook(paramsBook)
+    const params = useParams()
+    setTitle(params.title)
+    setTranslator(params.translator)
     props.setSelectedTitle(params.title)
   })
 
@@ -28,19 +27,21 @@ export const FullText = (props) => {
         ref={fullTextRef}
       >
         <>
-          <BookInfo book={book()} />
+          <BookInfo title={title()} translator={translator()} />
           <ChapterList
-            book={book()}
+            title={title()}
+            translator={translator()}
             fullTextRef={fullTextRef}
             setPercentScrolledToChapter={setPercentScrolledToChapter}
           />
-          <Chapters book={book()} />
+          <Chapters title={title()} translator={translator()} />
         </>
       </div>
       <Slider
         fullTextRef={fullTextRef}
         rootDivRef={props.rootDivRef}
-        book={book}
+        title={title()}
+        translator={translator()}
         percentScrolledToChapter={percentScrolledToChapter()}
       />
     </div>

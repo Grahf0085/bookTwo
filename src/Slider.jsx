@@ -20,13 +20,13 @@ export const Slider = (props) => {
   })
 
   createEffect((prev) => {
-    const book = props.book
-    if (book() !== prev) {
+    const book = `${props.title} + ${props.translator}`
+    if (book !== prev) {
       setChapterClicked(false)
       setPage(0)
       setMaxPages()
     }
-    return book()
+    return book
   }, '')
 
   createEffect(() => {

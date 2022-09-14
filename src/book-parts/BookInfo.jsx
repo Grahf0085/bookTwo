@@ -2,7 +2,10 @@ import { createResource, For } from 'solid-js'
 import { fetchBookInfo } from '../utils/nietzscheAPI.js'
 
 export const BookInfo = (props) => {
-  const [fetchedBookInfo] = createResource(() => props.book, fetchBookInfo)
+  const [fetchedBookInfo] = createResource(
+    () => [props.title, props.translator],
+    fetchBookInfo
+  )
 
   return (
     <For each={fetchedBookInfo()}>

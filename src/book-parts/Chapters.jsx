@@ -5,7 +5,7 @@ import { Paragraphs } from './Paragraphs.jsx'
 
 export const Chapters = (props) => {
   const [fetchedBookChapters] = createResource(
-    () => props.book,
+    () => [props.title, props.translator],
     fetchBookChapters
   )
 
@@ -23,7 +23,11 @@ export const Chapters = (props) => {
           <h2 id={chapter.chapterNumber} class='px-20 font-semibold'>
             {chapter.chapterName}
           </h2>
-          <Paragraphs chapterNumber={chapter.chapterNumber} book={props.book} />
+          <Paragraphs
+            chapterNumber={chapter.chapterNumber}
+            title={props.title}
+            translator={props.translator}
+          />
           <div class='h-full' />
         </>
       )}

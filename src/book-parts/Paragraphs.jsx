@@ -4,7 +4,7 @@ import { fetchChapterParagraphs } from '../utils/nietzscheAPI.js'
 
 export const Paragraphs = (props) => {
   const [fetchedChapterParagraphs] = createResource(
-    () => [props.book, props.chapterNumber],
+    () => [props.title, props.translator, props.chapterNumber],
     fetchChapterParagraphs
   )
 

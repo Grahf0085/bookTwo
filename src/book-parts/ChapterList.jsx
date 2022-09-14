@@ -6,7 +6,7 @@ export const ChapterList = (props) => {
   let scrollWidth
 
   const [fetchedChapterInfo] = createResource(
-    () => props.book,
+    () => [props.title, props.translator],
     fetchBookChapters
   )
 
