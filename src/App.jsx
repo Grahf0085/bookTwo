@@ -1,3 +1,6 @@
+//TODO consider going back to useing custom function for windowWidth
+//TODO GM chapter 2 para 11 is empty
+
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from 'solid-app-router'
 import { Nav } from './navigation/Nav.jsx'
@@ -27,17 +30,15 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/book'>
           <Route path='/:translator'>
-            <Route path='/:title'>
-              <Route
-                path='/:chapter'
-                element={
-                  <FullText
-                    rootDivRef={rootDivRef}
-                    setSelectedTitle={setSelectedTitle}
-                  />
-                }
-              />
-            </Route>
+            <Route
+              path='/:title'
+              element={
+                <FullText
+                  rootDivRef={rootDivRef}
+                  setSelectedTitle={setSelectedTitle}
+                />
+              }
+            />
           </Route>
         </Route>
         <Route path='/redirect'>

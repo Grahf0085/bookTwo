@@ -1,5 +1,4 @@
 import { createResource, For } from 'solid-js'
-// import { useParams } from 'solid-app-router'
 import { fetchBookChapters } from '../utils/nietzscheAPI.js'
 import { Paragraphs } from './Paragraphs.jsx'
 
@@ -8,13 +7,6 @@ export const Chapters = (props) => {
     () => [props.title, props.translator],
     fetchBookChapters
   )
-
-  // const params = useParams()
-  //
-  // const [fetchedBookChapters] = createResource(
-  //   () => props.book,
-  //   fetchBookChapters
-  // )
 
   return (
     <For each={fetchedBookChapters()}>

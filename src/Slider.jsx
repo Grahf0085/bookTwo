@@ -1,6 +1,6 @@
 import { onMount, createEffect, createSignal } from 'solid-js'
-import { createWindowWidth } from './utils/createWindowWidth.jsx'
 import { createScrollWidth } from './utils/createScrollWidth.jsx'
+import { useWindowSize } from '@solid-primitives/resize-observer'
 
 export const Slider = (props) => {
   let sliderRef
@@ -8,11 +8,64 @@ export const Slider = (props) => {
   let scrollWidth
 
   const [page, setPage] = createSignal(0)
-  const [maxScroll, setMaxScroll] = createSignal(0)
+  const [maxScroll, setMaxScroll] = createSignal(0) //rename to maxPage?
   const [chapterClicked, setChapterClicked] = createSignal(false)
+
+  const windowSize = useWindowSize()
+
+  createEffect(() => {
+    windowWidth = windowSize.width
+  })
+
+  /* createEffect((prev) => { */
+  /*   windowWidth = windowSize.width */
+  /*   const oldPage = page() */
+  /*   const oldMaxPage = maxScroll() */
+  /*   if (windowWidth !== prev) { */
+  /*     console.log('old page is: ', oldPage) */
+  /*     console.log('old max is: ', oldMaxPage) */
+  /*     console.log('ratio is: ', oldPage / oldMaxPage) */
+  /*     setPage(0) */
+  /*     setMaxPages() */
+  /*     console.log('old window: ', prev) */
+  /*     console.log('new window: ', windowWidth) */
+  /*     scrollWidth = createScrollWidth(props.fullTextRef) */
+  /*     console.log('testing scroll width: ', scrollWidth()) */
+  /*     const totalWidth = scrollWidth() - window.innerWidth */
+  /*     console.log('testing total width: ', totalWidth) */
+  /*     const percentScrolled = props.fullTextRef.scrollLeft / scrollWidth() */
+  /*     console.log('testing percent scroll: ', percentScrolled) */
+  /*     setPage(Math.ceil(maxScroll() * percentScrolled)) */
+  /*   } */
+  /*   return windowWidth */
+  /* }) */
 
   onMount(() => {
     props.rootDivRef.focus()
+  })
+
+  createEffect((prev) => {
+    const currentWindowWidth = windowSize.width
+    const currentScrollWidth = createScrollWidth(props.fullTextRef)
+    const currentTotalWidth = currentScrollWidth() - window.innerWidth
+    const currentPercentScrolled =
+      props.fullTextRef.scrollLeft / currentTotalWidth
+    console.log('original stuff: ', currentPercentScrolled)
+    if (currentWindowWidth !== prev && prev !== undefined) {
+      /* setTimeout(() => { */
+      /*   const newScrollWidth = createScrollWidth(props.fullTextRef) */
+      /*   const newTotalWidth = newScrollWidth() - window.innerWidth */
+      /*   const newPercentScrolled = props.fullTextRef.scrollLeft / newTotalWidth */
+      /*   console.log('new stuff: ', newPercentScrolled) */
+      /* }, 500) */
+      setMaxPages()
+      setPage(0)
+      props.fullTextRef.scrollLeft = 0
+      setTimeout(() => {
+        setPage(Math.ceil(maxScroll() * currentPercentScrolled))
+      }, 1000)
+    }
+    return currentWindowWidth
   })
 
   createEffect(() => {
@@ -29,16 +82,13 @@ export const Slider = (props) => {
     return book
   }, '')
 
-  createEffect(() => {
-    windowWidth = createWindowWidth()
-  })
-
   createEffect((prev) => {
     const currentSlider = page()
     if (currentSlider > prev && chapterClicked() === false)
-      scroll(windowWidth() * (currentSlider - prev))
-    if (currentSlider < prev && chapterClicked() === false)
-      scroll(-windowWidth() * (prev - currentSlider))
+      scroll(windowWidth * (currentSlider - prev))
+    if (currentSlider < prev && chapterClicked() === false) {
+      scroll(-windowWidth * (prev - currentSlider))
+    }
     return currentSlider
   })
 
@@ -46,7 +96,7 @@ export const Slider = (props) => {
     const currentChapter = props.percentScrolledToChapter
     if (currentChapter !== prev) {
       setChapterClicked(true)
-      setPage(Math.ceil(maxScroll() * (props.percentScrolledToChapter / 100)))
+      setPage(Math.ceil(maxScroll() * props.percentScrolledToChapter))
     }
     return currentChapter
   })
@@ -59,9 +109,10 @@ export const Slider = (props) => {
 
   const setMaxPages = () => {
     createEffect(() => {
+      //maybe I can remove the createEffect?
       setTimeout(() => {
         scrollWidth = createScrollWidth(props.fullTextRef)
-        setMaxScroll(Math.ceil(scrollWidth() / windowWidth() - 1))
+        setMaxScroll(Math.ceil(scrollWidth() / windowWidth - 1))
         sliderRef.setAttribute('max', maxScroll())
       }, 500)
     })

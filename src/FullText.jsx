@@ -12,7 +12,6 @@ export const FullText = (props) => {
   const [title, setTitle] = createSignal()
   const [translator, setTranslator] = createSignal()
 
-  //TODO intsead of passing book as props have each section use useParams()?
   createEffect(() => {
     const params = useParams()
     setTitle(params.title)

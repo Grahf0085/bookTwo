@@ -57,7 +57,7 @@ export const NavLinks = (props) => {
                     <Link
                       href={`/book/${
                         translator.translatorName
-                      }/${hoveredBook()}/Title`}
+                      }/${hoveredBook()}`}
                       class='cursor-pointer font-rubik text-sm text-linkHover my-2.5 hidden group-hover:md:block hover:md:block md:my-0 p-3'
                     >
                       {translator.translatorName}

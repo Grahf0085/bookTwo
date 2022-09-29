@@ -17,7 +17,7 @@ export const ChapterList = (props) => {
     setTimeout(() => {
       scrollWidth = createScrollWidth(props.fullTextRef)
       const totalWidth = scrollWidth() - window.innerWidth
-      const percentScrolled = (props.fullTextRef.scrollLeft / totalWidth) * 100
+      const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
       props.setPercentScrolledToChapter(percentScrolled)
     }, 500)
   }
