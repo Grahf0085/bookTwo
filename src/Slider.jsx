@@ -10,6 +10,7 @@ export const Slider = (props) => {
   const [page, setPage] = createSignal(0)
   const [maxScroll, setMaxScroll] = createSignal(0) //rename to maxPage?
   const [chapterClicked, setChapterClicked] = createSignal(false)
+  const [textOnScreen, setTextOnScreen] = createSignal()
 
   const windowSize = useWindowSize()
 
@@ -17,59 +18,45 @@ export const Slider = (props) => {
     windowWidth = windowSize.width
   })
 
-  /* createEffect((prev) => { */
-  /*   windowWidth = windowSize.width */
-  /*   const oldPage = page() */
-  /*   const oldMaxPage = maxScroll() */
-  /*   if (windowWidth !== prev) { */
-  /*     console.log('old page is: ', oldPage) */
-  /*     console.log('old max is: ', oldMaxPage) */
-  /*     console.log('ratio is: ', oldPage / oldMaxPage) */
-  /*     setPage(0) */
-  /*     setMaxPages() */
-  /*     console.log('old window: ', prev) */
-  /*     console.log('new window: ', windowWidth) */
-  /*     scrollWidth = createScrollWidth(props.fullTextRef) */
-  /*     console.log('testing scroll width: ', scrollWidth()) */
-  /*     const totalWidth = scrollWidth() - window.innerWidth */
-  /*     console.log('testing total width: ', totalWidth) */
-  /*     const percentScrolled = props.fullTextRef.scrollLeft / scrollWidth() */
-  /*     console.log('testing percent scroll: ', percentScrolled) */
-  /*     setPage(Math.ceil(maxScroll() * percentScrolled)) */
-  /*   } */
-  /*   return windowWidth */
-  /* }) */
-
   onMount(() => {
     props.rootDivRef.focus()
   })
 
-  createEffect((prev) => {
-    const currentWindowWidth = windowSize.width
-    const currentScrollWidth = createScrollWidth(props.fullTextRef)
-    const currentTotalWidth = currentScrollWidth() - window.innerWidth
-    const currentPercentScrolled =
-      props.fullTextRef.scrollLeft / currentTotalWidth
-    console.log('original stuff: ', currentPercentScrolled)
-    if (currentWindowWidth !== prev && prev !== undefined) {
-      /* setTimeout(() => { */
-      /*   const newScrollWidth = createScrollWidth(props.fullTextRef) */
-      /*   const newTotalWidth = newScrollWidth() - window.innerWidth */
-      /*   const newPercentScrolled = props.fullTextRef.scrollLeft / newTotalWidth */
-      /*   console.log('new stuff: ', newPercentScrolled) */
-      /* }, 500) */
-      setMaxPages()
-      setPage(0)
-      props.fullTextRef.scrollLeft = 0
-      setTimeout(() => {
-        setPage(Math.ceil(maxScroll() * currentPercentScrolled))
-      }, 1000)
-    }
-    return currentWindowWidth
-  })
-
   createEffect(() => {
     props.rootDivRef.focus()
+  })
+
+  let options = {
+    root: null, // relative to document viewport
+    rootMargin: '0px', // margin around root. Values are similar to css property. Unitless values not allowed
+    threshold: 1.0, // visible amount of item shown in relation to root
+  }
+
+  createEffect(() => {
+    setTimeout(() => {
+      const paragraphs = document.querySelectorAll('.bookParagraphs')
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.intersectionRatio > 0) {
+            setTextOnScreen(entry.target.id)
+          }
+        })
+      }, options)
+      paragraphs.forEach((paragraph) => {
+        observer.observe(paragraph)
+      })
+    }, 500)
+  })
+
+  createEffect((prev) => {
+    const currentWindowWidth = windowSize.width
+    if (currentWindowWidth !== prev && prev !== undefined) {
+      setMaxPages()
+      document
+        .getElementById(textOnScreen())
+        .scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+    return currentWindowWidth
   })
 
   createEffect((prev) => {
