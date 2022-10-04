@@ -1,3 +1,5 @@
+//TODO resizing window on non paragraph, ie chapter list causes scroll to last paragraph in view
+
 import { onMount, createEffect, createSignal } from 'solid-js'
 import { createScrollWidth } from './utils/createScrollWidth.jsx'
 import { useWindowSize } from '@solid-primitives/resize-observer'
@@ -10,6 +12,7 @@ export const Slider = (props) => {
   const [page, setPage] = createSignal(0)
   const [maxScroll, setMaxScroll] = createSignal(0) //rename to maxPage?
   const [chapterClicked, setChapterClicked] = createSignal(false)
+  const [resized, setResized] = createSignal(false)
   const [textOnScreen, setTextOnScreen] = createSignal()
 
   const windowSize = useWindowSize()
@@ -51,18 +54,36 @@ export const Slider = (props) => {
   createEffect((prev) => {
     const currentWindowWidth = windowSize.width
     if (currentWindowWidth !== prev && prev !== undefined) {
+      setResized(true)
+      setPage(0)
+      props.fullTextRef.scrollLeft = 0
+      props.fullTextRef.scrollTop = 0
       setMaxPages()
-      document
-        .getElementById(textOnScreen())
-        .scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      document.getElementById(textOnScreen()).scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      })
+      setTimeout(() => {
+        scrollWidth = createScrollWidth(props.fullTextRef)
+        const totalWidth = scrollWidth() - currentWindowWidth
+        const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
+        setPage(Math.ceil(maxScroll() * percentScrolled))
+      }, 700)
     }
     return currentWindowWidth
+  })
+
+  createEffect((prev) => {
+    const elementInView = textOnScreen()
+    if (elementInView === undefined) setTextOnScreen(prev)
+    return elementInView
   })
 
   createEffect((prev) => {
     const book = `${props.title} + ${props.translator}`
     if (book !== prev) {
       setChapterClicked(false)
+      setResized(false)
       setPage(0)
       setMaxPages()
     }
@@ -71,11 +92,19 @@ export const Slider = (props) => {
 
   createEffect((prev) => {
     const currentSlider = page()
-    if (currentSlider > prev && chapterClicked() === false)
+    if (
+      currentSlider > prev &&
+      chapterClicked() === false &&
+      resized() === false
+    )
       scroll(windowWidth * (currentSlider - prev))
-    if (currentSlider < prev && chapterClicked() === false) {
+    if (
+      currentSlider < prev &&
+      chapterClicked() === false &&
+      resized() === false
+    )
       scroll(-windowWidth * (prev - currentSlider))
-    }
+
     return currentSlider
   })
 
@@ -95,14 +124,11 @@ export const Slider = (props) => {
   })
 
   const setMaxPages = () => {
-    createEffect(() => {
-      //maybe I can remove the createEffect?
-      setTimeout(() => {
-        scrollWidth = createScrollWidth(props.fullTextRef)
-        setMaxScroll(Math.ceil(scrollWidth() / windowWidth - 1))
-        sliderRef.setAttribute('max', maxScroll())
-      }, 500)
-    })
+    setTimeout(() => {
+      scrollWidth = createScrollWidth(props.fullTextRef)
+      setMaxScroll(Math.ceil(scrollWidth() / windowWidth - 1))
+      sliderRef.setAttribute('max', maxScroll())
+    }, 300)
   }
 
   const scroll = (scrollOffset) => {
@@ -112,10 +138,12 @@ export const Slider = (props) => {
   const handleSliderChange = (event) => {
     if (event.which === 37 && page() !== 0) {
       setChapterClicked(false)
+      setResized(false)
       setPage(page() - 1)
     }
     if (event.which === 39 && page() !== maxScroll()) {
       setChapterClicked(false)
+      setResized(false)
       setPage(page() + 1)
     }
   }
@@ -129,6 +157,7 @@ export const Slider = (props) => {
         onKeyDown={() => event.preventDefault()}
         onChange={() => {
           setChapterClicked(false)
+          setResized(false)
           setPage(parseInt(event.target.value))
         }}
         class='w-full'
