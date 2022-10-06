@@ -1,5 +1,5 @@
 import { createSignal, createEffect } from 'solid-js'
-import { useParams } from 'solid-app-router'
+import { useParams } from '@solidjs/router'
 import { BookInfo } from './book-parts/BookInfo.jsx'
 import { ChapterList } from './book-parts/ChapterList.jsx'
 import { Chapters } from './book-parts/Chapters.jsx'

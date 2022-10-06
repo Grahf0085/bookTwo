@@ -1,8 +1,9 @@
-//TODO consider going back to useing custom function for windowWidth
+//TODO consider going back to using custom function for windowWidth
 //TODO GM chapter 2 para 11 is empty
+//TODO add optional param for chapter and paragraph and use .scrollInfoView to scroll to it
 
 import { createSignal } from 'solid-js'
-import { Route, Routes, Navigate } from 'solid-app-router'
+import { Route, Routes, Navigate } from '@solidjs/router'
 import { Nav } from './navigation/Nav.jsx'
 import { Home } from './Home.jsx'
 import { FullText } from './FullText.jsx'
@@ -11,10 +12,6 @@ function App() {
   let rootDivRef
 
   const [selectedTitle, setSelectedTitle] = createSignal()
-
-  function getPath() {
-    return '/'
-  }
 
   return (
     <div
@@ -39,11 +36,18 @@ function App() {
                 />
               }
             />
+            <Route
+              path='/:title/:chapter'
+              element={
+                <FullText
+                  rootDivRef={rootDivRef}
+                  setSelectedTitle={setSelectedTitle}
+                />
+              }
+            />
           </Route>
         </Route>
-        <Route path='/redirect'>
-          <Navigate href={getPath} />
-        </Route>
+        <Route path='/*' element={<Navigate href='/' />} />
       </Routes>
     </div>
   )

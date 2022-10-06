@@ -3,6 +3,7 @@
 import { onMount, createEffect, createSignal } from 'solid-js'
 import { createScrollWidth } from './utils/createScrollWidth.jsx'
 import { useWindowSize } from '@solid-primitives/resize-observer'
+import { useSearchParams } from '@solidjs/router'
 
 export const Slider = (props) => {
   let sliderRef
@@ -14,6 +15,8 @@ export const Slider = (props) => {
   const [chapterClicked, setChapterClicked] = createSignal(false)
   const [resized, setResized] = createSignal(false)
   const [textOnScreen, setTextOnScreen] = createSignal()
+
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const windowSize = useWindowSize()
 
@@ -77,6 +80,16 @@ export const Slider = (props) => {
     const elementInView = textOnScreen()
     if (elementInView === undefined) setTextOnScreen(prev)
     return elementInView
+  })
+
+  createEffect((prev) => {
+    const chapter = textOnScreen()
+    if (chapter !== prev) {
+      setSearchParams({ testing: chapter })
+      console.log(searchParams)
+      console.log('read this: ', textOnScreen())
+    }
+    return chapter
   })
 
   createEffect((prev) => {

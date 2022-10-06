@@ -1,5 +1,5 @@
 import { createSignal } from 'solid-js'
-import { Link } from 'solid-app-router'
+import { Link } from '@solidjs/router'
 import { NavLinks } from './NavLinks.jsx'
 import face from '../assets/face.png'
 

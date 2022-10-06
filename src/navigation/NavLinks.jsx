@@ -1,5 +1,5 @@
 import { For, createSignal, createResource, onMount } from 'solid-js'
-import { Link } from 'solid-app-router'
+import { Link } from '@solidjs/router'
 import { fetchTitles, fetchTranslators } from '../utils/nietzscheAPI.js'
 
 export const NavLinks = (props) => {
