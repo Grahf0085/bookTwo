@@ -14,20 +14,18 @@ export const Paragraphs = (props) => {
   return (
     <For each={fetchedChapterParagraphs()}>
       {(paragraph) => (
-        <>
-          <p
-            id={
-              'chapter: ' +
-              paragraph.chapterNumber +
-              ' ' +
-              'paragraph: ' +
-              paragraph.paragraphNumber
-            }
-            class='whitespace-pre-wrap max-w-full min-w-full h-fit px-20 py-2 bookParagraphs'
-          >
-            {paragraph.paragraphText}
-          </p>
-        </>
+        <p
+          id={
+            'chapter: ' +
+            paragraph.chapterNumber +
+            ' ' +
+            'paragraph: ' +
+            paragraph.paragraphNumber
+          }
+          class='whitespace-pre-wrap max-w-full min-w-full h-fit px-20 py-2 bookParagraphs'
+        >
+          {paragraph.paragraphText}
+        </p>
       )}
     </For>
   )

@@ -14,7 +14,7 @@ export const Slider = (props) => {
   const [maxScroll, setMaxScroll] = createSignal(0) //rename to maxPage?
   const [chapterClicked, setChapterClicked] = createSignal(false)
   const [resized, setResized] = createSignal(false)
-  const [textOnScreen, setTextOnScreen] = createSignal()
+  const [textOnScreen, setTextOnScreen] = createSignal(' ')
 
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -38,29 +38,33 @@ export const Slider = (props) => {
     threshold: 1.0, // visible amount of item shown in relation to root
   }
 
-  createEffect(() => {
-    setTimeout(() => {
-      const paragraphs = document.querySelectorAll('.bookParagraphs')
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.intersectionRatio > 0) {
-            setTextOnScreen(entry.target.id)
-          }
+  createEffect((prev) => {
+    const book = `${props.title} + ${props.translator}`
+    if (book !== prev) {
+      setTimeout(() => {
+        const paragraphs = document.querySelectorAll('.bookParagraphs')
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.intersectionRatio > 0) {
+              setTextOnScreen(entry.target.id)
+            }
+          })
+        }, options)
+        paragraphs.forEach((paragraph) => {
+          observer.observe(paragraph)
         })
-      }, options)
-      paragraphs.forEach((paragraph) => {
-        observer.observe(paragraph)
-      })
-    }, 500)
-  })
+      }, 500)
+    }
+  }, '')
 
   createEffect((prev) => {
     const currentWindowWidth = windowSize.width
-    if (currentWindowWidth !== prev && prev !== undefined) {
+    if (currentWindowWidth !== prev) {
+      //TODO add default value to prev so dont have to check for undefined
       setResized(true)
       setPage(0)
       props.fullTextRef.scrollLeft = 0
-      props.fullTextRef.scrollTop = 0
+      props.fullTextRef.scrollTop = 0 //TODO is this needed?
       setMaxPages()
       document.getElementById(textOnScreen()).scrollIntoView({
         behavior: 'smooth',
@@ -74,7 +78,7 @@ export const Slider = (props) => {
       }, 700)
     }
     return currentWindowWidth
-  })
+  }, windowSize.width)
 
   createEffect((prev) => {
     const elementInView = textOnScreen()
@@ -83,14 +87,17 @@ export const Slider = (props) => {
   })
 
   createEffect((prev) => {
-    const chapter = textOnScreen()
-    if (chapter !== prev) {
-      setSearchParams({ testing: chapter })
-      console.log(searchParams)
-      console.log('read this: ', textOnScreen())
+    const chapterAndParagraph = textOnScreen()
+    console.log('really look here: ', chapterAndParagraph)
+    if (chapterAndParagraph !== prev && chapterAndParagraph !== ' ') {
+      const chapter = chapterAndParagraph.split(' ')[1]
+      const paragraph = chapterAndParagraph.split(' ')[3].slice(0, -1)
+      console.log('read this: ', searchParams.paragraph) //what am I supposed to do with this?
+      setSearchParams({ paragraph: paragraph })
+      setSearchParams({ chapter: chapter })
     }
-    return chapter
-  })
+    return chapterAndParagraph
+  }, '')
 
   createEffect((prev) => {
     const book = `${props.title} + ${props.translator}`
