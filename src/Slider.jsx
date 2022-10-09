@@ -53,7 +53,7 @@ export const Slider = (props) => {
         paragraphs.forEach((paragraph) => {
           observer.observe(paragraph)
         })
-      }, 500)
+      }, 300)
     }
   }, '')
 
@@ -88,13 +88,22 @@ export const Slider = (props) => {
 
   createEffect((prev) => {
     const chapterAndParagraph = textOnScreen()
-    console.log('really look here: ', chapterAndParagraph)
     if (chapterAndParagraph !== prev && chapterAndParagraph !== ' ') {
       const chapter = chapterAndParagraph.split(' ')[1]
-      const paragraph = chapterAndParagraph.split(' ')[3].slice(0, -1)
+      let paragraph = chapterAndParagraph.split(' ')[3].slice(0, -1) //TODO remove period from end of number in backend
+      if (page() === 0) {
+        paragraph = null
+        setSearchParams({ paragraph: paragraph })
+      }
+      if (page() === 1) {
+        paragraph = null
+        setSearchParams({ paragraph: paragraph })
+      }
+      setTimeout(() => {
+        setSearchParams({ paragraph: paragraph })
+        setSearchParams({ chapter: chapter })
+      }, 100)
       console.log('read this: ', searchParams.paragraph) //what am I supposed to do with this?
-      setSearchParams({ paragraph: paragraph })
-      setSearchParams({ chapter: chapter })
     }
     return chapterAndParagraph
   }, '')

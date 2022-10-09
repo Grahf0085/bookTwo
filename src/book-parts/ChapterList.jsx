@@ -29,7 +29,8 @@ export const ChapterList = (props) => {
           <>
             <h1
               onClick={() => handleChapterLink(info.chapterNumber)}
-              class='pointer-events-auto cursor-pointer'
+              id={'chapter: chapter-list paragraph: not applicable.'}
+              class='pointer-events-auto cursor-pointer bookParagraphs'
             >
               {info.chapterName}
             </h1>
