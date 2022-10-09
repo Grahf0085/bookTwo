@@ -1,7 +1,5 @@
 //TODO consider going back to using custom function for windowWidth
-//TODO add optional param for chapter and paragraph and use .scrollInfoView to scroll to it
 //TODO sometimes all pages still aren't loaded when changing books
-//TODO GM 1-11 IS EMPTY
 //TODO ps with overflow don't get set to textOnScreen
 //TODO changing chapter doesn't change paragraph in search params. ie going from GM preface to Gm chap 1
 

@@ -1,4 +1,3 @@
-//TODO resizing window on non paragraph, ie chapter list causes scroll to last paragraph in view
 //TODO tie search params to what's on screen
 
 import { onMount, createEffect, createSignal } from 'solid-js'
@@ -89,7 +88,7 @@ export const Slider = (props) => {
     const chapterAndParagraph = textOnScreen()
     if (chapterAndParagraph !== prev && chapterAndParagraph !== ' ') {
       const chapter = chapterAndParagraph.split(' ')[1]
-      let paragraph = chapterAndParagraph.split(' ')[3].slice(0, -1) //TODO remove period from end of number in backend
+      let paragraph = chapterAndParagraph.split(' ')[3]
       if (page() === 0) {
         paragraph = null
         setSearchParams({ paragraph: paragraph })
