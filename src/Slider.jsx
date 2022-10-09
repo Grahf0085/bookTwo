@@ -61,9 +61,8 @@ export const Slider = (props) => {
   createEffect((prev) => {
     const currentWindowWidth = windowSize.width
     if (currentWindowWidth !== prev) {
-      //TODO add default value to prev so dont have to check for undefined
       setResized(true)
-      setPage(0)
+      props.fullTextRef.scrollTop = 0
       setMaxPages()
       document.getElementById(textOnScreen()).scrollIntoView({
         behavior: 'smooth',
@@ -73,7 +72,7 @@ export const Slider = (props) => {
         scrollWidth = createScrollWidth(props.fullTextRef)
         const totalWidth = scrollWidth() - currentWindowWidth
         const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
-        setPage(Math.ceil(maxScroll() * percentScrolled))
+        setPage(Math.floor(maxScroll() * percentScrolled))
       }, 700)
     }
     return currentWindowWidth
