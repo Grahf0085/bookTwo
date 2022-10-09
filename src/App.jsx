@@ -1,8 +1,8 @@
 //TODO consider going back to using custom function for windowWidth
-//TODO GM chapter 2 para 11 is empty
 //TODO add optional param for chapter and paragraph and use .scrollInfoView to scroll to it
-//TODO GM chapter 1 para 14 has no para id?
 //TODO sometimes all pages still aren't loaded when changing books
+//TODO GM 1-11 IS EMPTY
+//TODO ps with overflow don't get set to textOnScreen
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'

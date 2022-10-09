@@ -1,4 +1,5 @@
 //TODO resizing window on non paragraph, ie chapter list causes scroll to last paragraph in view
+//TODO tie search params to what's on screen
 
 import { onMount, createEffect, createSignal } from 'solid-js'
 import { createScrollWidth } from './utils/createScrollWidth.jsx'
@@ -63,8 +64,6 @@ export const Slider = (props) => {
       //TODO add default value to prev so dont have to check for undefined
       setResized(true)
       setPage(0)
-      props.fullTextRef.scrollLeft = 0
-      props.fullTextRef.scrollTop = 0 //TODO is this needed?
       setMaxPages()
       document.getElementById(textOnScreen()).scrollIntoView({
         behavior: 'smooth',
@@ -81,6 +80,7 @@ export const Slider = (props) => {
   }, windowSize.width)
 
   createEffect((prev) => {
+    //TODO is this ever used?
     const elementInView = textOnScreen()
     if (elementInView === undefined) setTextOnScreen(prev)
     return elementInView
