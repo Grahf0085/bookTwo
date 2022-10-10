@@ -7,9 +7,6 @@ export const Paragraphs = (props) => {
     fetchChapterParagraphs
   )
 
-  //TODO some paragraphs longer than window.....they don't wrap
-  //TODO disable search with browser search function
-
   return (
     <For each={fetchedChapterParagraphs()}>
       {(paragraph) => (

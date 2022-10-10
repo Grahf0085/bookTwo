@@ -1,5 +1,3 @@
-//TODO tie search params to what's on screen
-
 import { onMount, createEffect, createSignal } from 'solid-js'
 import { createScrollWidth } from './utils/createScrollWidth.jsx'
 import { useWindowSize } from '@solid-primitives/resize-observer'

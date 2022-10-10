@@ -41,5 +41,8 @@ export const fetchChapterParagraphs = async (bookAndTranslatorAndChapter) => {
     `http://localhost:1844/api/paragraphs-info/${title}/${translator}/${chapter}`
   )
   const results = await response.json()
-  return results
+  const sortedResults = results.sort(
+    (a, b) => a.paragraphNumber - b.paragraphNumber
+  )
+  return sortedResults
 }

@@ -2,6 +2,8 @@
 //TODO sometimes all pages still aren't loaded when changing books
 //TODO ps with overflow don't get set to textOnScreen
 //TODO changing chapter doesn't change paragraph in search params. ie going from GM preface to Gm chap 1
+//TODO tie search params to what's on screen
+//TODO some paragraphs longer than window.....they don't wrap
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'
