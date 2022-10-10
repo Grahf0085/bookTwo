@@ -8,7 +8,6 @@ export const Paragraphs = (props) => {
   )
 
   //TODO some paragraphs longer than window.....they don't wrap
-  //TODO chapters that end in letters not in right place
   //TODO disable search with browser search function
 
   return (

@@ -14,6 +14,11 @@ function App() {
 
   const [selectedTitle, setSelectedTitle] = createSignal()
 
+  window.addEventListener('keydown', function (event) {
+    if (event.keyCode === 114 || (event.ctrlKey && event.keyCode === 70))
+      event.preventDefault()
+  })
+
   return (
     <div
       ref={rootDivRef}
