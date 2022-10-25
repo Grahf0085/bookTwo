@@ -3,8 +3,13 @@
     "browser": true,
     "es2021": true
   },
-  "plugins": ["solid"],
-  "extends": ["eslint:recommended", "plugin:solid/recommended"],
+  "plugins": [
+    "solid"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:solid/recommended"
+  ],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
