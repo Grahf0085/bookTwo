@@ -13,7 +13,6 @@ export const Slider = (props) => {
   const [chapterClicked, setChapterClicked] = createSignal(false)
   const [resized, setResized] = createSignal(false)
   const [textOnScreen, setTextOnScreen] = createSignal(' ')
-  const [showLink, setShowLink] = createSignal(false)
 
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -46,16 +45,6 @@ export const Slider = (props) => {
           entries.forEach((entry) => {
             if (entry.intersectionRatio > 0) {
               setTextOnScreen(entry.target.id)
-              if (
-                entry.target.parentElement.clientHeight <
-                entry.target.scrollHeight
-              )
-                setShowLink(true)
-              if (
-                entry.target.parentElement.clientHeight >=
-                entry.target.scrollHeight
-              )
-                setShowLink(false)
             }
           })
         }, options)
@@ -202,7 +191,6 @@ export const Slider = (props) => {
       <h2>
         Page {page()} of {maxScroll()}
       </h2>
-      <h2>{showLink()}</h2>
     </div>
   )
 }

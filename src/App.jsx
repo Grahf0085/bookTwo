@@ -5,6 +5,7 @@
 //TODO some paragraphs longer than window.....they don't wrap
 //TODO what about height resize?
 //TODO data functions from router
+//TODO check spacing withi paragraphs
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'

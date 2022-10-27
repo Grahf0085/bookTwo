@@ -20,9 +20,9 @@ export const FullText = (props) => {
   })
 
   return (
-    <div class='flex flex-col h-[88vh] max-h-[88vh] min-h-[88vh] w-screen pointer-events-none'>
+    <div class='flex flex-col w-screen h-[88vh]'>
       <div
-        class='overflow-y-hidden flex flex-col flex-wrap w-[100vw] max-w-[100vw] no-scrollbar'
+        class='flex flex-col flex-wrap w-[100vw] h-full no-scrollbar overflow-x-hidden'
         ref={fullTextRef}
       >
         <>

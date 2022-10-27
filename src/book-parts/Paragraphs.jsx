@@ -18,7 +18,7 @@ export const Paragraphs = (props) => {
             'paragraph: ' +
             paragraph.paragraphNumber
           }
-          class='overflow-hidden h-fit whitespace-pre-wrap max-w-full min-w-full px-20 py-2 bookParagraphs' //TODO overflow needs to be shown somehow
+          class='whitespace-pre-wrap overflow-scroll w-full px-20 py-2 overflow-x-hidden bookParagraphs'
         >
           {paragraph.paragraphText}
         </p>
