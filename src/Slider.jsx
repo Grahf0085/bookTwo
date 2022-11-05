@@ -83,23 +83,12 @@ export const Slider = (props) => {
   })
 
   createEffect((prev) => {
-    //TODO play with this for discrepences when going back and forward
     const chapterAndParagraph = textOnScreen()
     if (chapterAndParagraph !== prev && chapterAndParagraph !== ' ') {
       const chapter = chapterAndParagraph.split(' ')[1]
-      let paragraph = chapterAndParagraph.split(' ')[3]
-      if (page() === 0) {
-        paragraph = null
-        setSearchParams({ paragraph: paragraph })
-      }
-      if (page() === 1) {
-        paragraph = null
-        setSearchParams({ paragraph: paragraph })
-      }
-      setTimeout(() => {
-        setSearchParams({ paragraph: paragraph })
-        setSearchParams({ chapter: chapter })
-      }, 100)
+      let paragraph =
+        page() === 0 || page() === 1 ? null : chapterAndParagraph.split(' ')[3]
+      setSearchParams({ chapter: chapter, paragraph: paragraph })
       console.log('read this: ', searchParams.paragraph) //what am I supposed to do with this?
     }
     return chapterAndParagraph

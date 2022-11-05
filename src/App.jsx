@@ -1,11 +1,7 @@
 //TODO consider going back to using custom function for windowWidth
-//TODO sometimes all pages still aren't loaded when changing books
 //TODO changing chapter doesn't change paragraph in search params. ie going from GM preface to Gm chap 1
 //TODO tie search params to what's on screen
-//TODO some paragraphs longer than window.....they don't wrap
-//TODO what about height resize?
-//TODO data functions from router
-//TODO check spacing withi paragraphs
+//TODO what about height resize? fs things up
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'
