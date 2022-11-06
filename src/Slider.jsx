@@ -30,7 +30,7 @@ export const Slider = (props) => {
     props.rootDivRef.focus()
   })
 
-  let options = {
+  const options = {
     root: null, // relative to document viewport
     rootMargin: '0px', // margin around root. Values are similar to css property. Unitless values not allowed
     threshold: 1.0, // visible amount of item shown in relation to root
