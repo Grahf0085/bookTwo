@@ -13,7 +13,7 @@ function App() {
 
   const [selectedTitle, setSelectedTitle] = createSignal()
 
-  window.addEventListener('keydown', function (event) {
+  window.addEventListener('keydown', (event) => {
     // prevents browser search due to it messing up horizontal scrolling
     if (event.keyCode === 114 || (event.ctrlKey && event.keyCode === 70))
       event.preventDefault()

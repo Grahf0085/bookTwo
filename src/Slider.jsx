@@ -1,4 +1,4 @@
-import { onMount, createEffect, createSignal } from 'solid-js'
+import { createEffect, createSignal } from 'solid-js'
 import { createScrollWidth } from './utils/createScrollWidth.jsx'
 import { useWindowSize } from '@solid-primitives/resize-observer'
 import { useSearchParams } from '@solidjs/router'
@@ -17,18 +17,6 @@ export const Slider = (props) => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const windowSize = useWindowSize()
-
-  createEffect(() => {
-    windowWidth = windowSize.width
-  })
-
-  onMount(() => {
-    props.rootDivRef.focus()
-  })
-
-  createEffect(() => {
-    props.rootDivRef.focus()
-  })
 
   const options = {
     root: null, // relative to document viewport
@@ -54,8 +42,8 @@ export const Slider = (props) => {
   }, '')
 
   createEffect((prev) => {
-    const currentWindowWidth = windowSize.width
-    if (currentWindowWidth !== prev) {
+    windowWidth = windowSize.width
+    if (windowWidth !== prev) {
       setResized(true)
       props.fullTextRef.scrollTop = 0
       setMaxPages()
@@ -65,12 +53,12 @@ export const Slider = (props) => {
       })
       setTimeout(() => {
         scrollWidth = createScrollWidth(props.fullTextRef)
-        const totalWidth = scrollWidth() - currentWindowWidth
+        const totalWidth = scrollWidth() - windowWidth
         const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
         setPage(Math.floor(maxScroll() * percentScrolled))
       }, 700)
     }
-    return currentWindowWidth
+    return windowWidth
   }, windowSize.width)
 
   createEffect((prev) => {

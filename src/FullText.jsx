@@ -14,6 +14,10 @@ export const FullText = (props) => {
   const [paragraphsLoaded, setParagraphsLoaded] = createSignal(false)
 
   createEffect(() => {
+    if (paragraphsLoaded()) fullTextRef.focus()
+  })
+
+  createEffect(() => {
     const params = useParams()
     setTitle(params.title)
     setTranslator(params.translator)
