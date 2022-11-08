@@ -1,4 +1,4 @@
-import { createResource, For } from 'solid-js'
+import { createEffect, onCleanup, createResource, For } from 'solid-js'
 import { fetchChapterParagraphs } from '../utils/nietzscheAPI.js'
 
 export const Paragraphs = (props) => {
@@ -6,6 +6,14 @@ export const Paragraphs = (props) => {
     () => [props.title, props.translator, props.chapterNumber],
     fetchChapterParagraphs
   )
+
+  createEffect(() => {
+    props.setParagraphsLoaded(fetchedChapterParagraphs.state)
+  })
+
+  onCleanup(() => {
+    props.setParagraphsLoaded('unresolved')
+  })
 
   return (
     <For each={fetchedChapterParagraphs()}>

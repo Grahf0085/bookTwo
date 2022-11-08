@@ -11,6 +11,7 @@ export const FullText = (props) => {
   const [percentScrolledToChapter, setPercentScrolledToChapter] = createSignal()
   const [title, setTitle] = createSignal()
   const [translator, setTranslator] = createSignal()
+  const [paragraphsLoaded, setParagraphsLoaded] = createSignal(false)
 
   createEffect(() => {
     const params = useParams()
@@ -33,7 +34,11 @@ export const FullText = (props) => {
             fullTextRef={fullTextRef}
             setPercentScrolledToChapter={setPercentScrolledToChapter}
           />
-          <Chapters title={title()} translator={translator()} />
+          <Chapters
+            title={title()}
+            translator={translator()}
+            setParagraphsLoaded={setParagraphsLoaded}
+          />
         </>
       </div>
       <Slider
@@ -42,6 +47,7 @@ export const FullText = (props) => {
         title={title()}
         translator={translator()}
         percentScrolledToChapter={percentScrolledToChapter()}
+        paragraphsLoaded={paragraphsLoaded()}
       />
     </div>
   )

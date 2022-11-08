@@ -20,6 +20,7 @@ export const Chapters = (props) => {
               chapterNumber={chapter.chapterNumber}
               title={props.title}
               translator={props.translator}
+              setParagraphsLoaded={props.setParagraphsLoaded}
             />
             <div class='h-full' />
           </>

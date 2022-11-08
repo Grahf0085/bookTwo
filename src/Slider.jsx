@@ -38,20 +38,18 @@ export const Slider = (props) => {
 
   createEffect((prev) => {
     const book = `${props.title} + ${props.translator}`
-    if (book !== prev) {
-      setTimeout(() => {
-        const paragraphs = document.querySelectorAll('.bookParagraphs')
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.intersectionRatio > 0) {
-              setTextOnScreen(entry.target.id)
-            }
-          })
-        }, options)
-        paragraphs.forEach((paragraph) => {
-          observer.observe(paragraph)
+    if (book !== prev && props.paragraphsLoaded === 'ready') {
+      const paragraphs = document.querySelectorAll('.bookParagraphs')
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.intersectionRatio > 0) {
+            setTextOnScreen(entry.target.id)
+          }
         })
-      }, 300)
+      }, options)
+      paragraphs.forEach((paragraph) => {
+        observer.observe(paragraph)
+      })
     }
   }, '')
 
