@@ -24,9 +24,8 @@ export const Slider = (props) => {
     threshold: 1.0, // visible amount of item shown in relation to root
   }
 
-  createEffect((prev) => {
-    const book = `${props.title} + ${props.translator}`
-    if (book !== prev && props.paragraphsLoaded === 'ready') {
+  createEffect(() => {
+    if (props.paragraphsLoaded === 'ready') {
       const paragraphs = document.querySelectorAll('.bookParagraphs')
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -39,7 +38,7 @@ export const Slider = (props) => {
         observer.observe(paragraph)
       })
     }
-  }, '')
+  })
 
   createEffect((prev) => {
     windowWidth = windowSize.width
