@@ -67,13 +67,6 @@ export const Slider = (props) => {
   }
 
   createEffect((prev) => {
-    //TODO is this ever used?
-    const elementInView = textOnScreen()
-    if (elementInView === undefined) setTextOnScreen(prev)
-    return elementInView
-  })
-
-  createEffect((prev) => {
     const chapterAndParagraph = textOnScreen()
     if (chapterAndParagraph !== prev && chapterAndParagraph !== ' ') {
       const chapter = chapterAndParagraph.split(' ')[1]
