@@ -2,14 +2,15 @@ import { createEffect, createSignal } from 'solid-js'
 import { createScrollWidth } from './utils/createScrollWidth.jsx'
 import { useWindowSize } from '@solid-primitives/resize-observer'
 import { useSearchParams } from '@solidjs/router'
+import scrollIntoView from 'smooth-scroll-into-view-if-needed'
 
 export const Slider = (props) => {
   let sliderRef
   let windowWidth
   let scrollWidth
 
-  const [page, setPage] = createSignal(0)
-  const [maxScroll, setMaxScroll] = createSignal(0) //rename to maxPage?
+  const [currentPage, setCurrentPage] = createSignal(0)
+  const [maxPage, setMaxPage] = createSignal(0)
   const [chapterClicked, setChapterClicked] = createSignal(false)
   const [resized, setResized] = createSignal(false)
   const [textOnScreen, setTextOnScreen] = createSignal(' ')
@@ -44,21 +45,26 @@ export const Slider = (props) => {
     windowWidth = windowSize.width
     if (windowWidth !== prev) {
       setResized(true)
-      props.fullTextRef.scrollTop = 0
       setMaxPages()
-      document.getElementById(textOnScreen()).scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-      })
-      setTimeout(() => {
-        scrollWidth = createScrollWidth(props.fullTextRef)
-        const totalWidth = scrollWidth() - windowWidth
-        const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
-        setPage(Math.floor(maxScroll() * percentScrolled))
-      }, 700)
+      handleWindowChange(textOnScreen())
     }
     return windowWidth
   }, windowSize.width)
+
+  const handleWindowChange = async (text) => {
+    const textOnScreen = document.getElementById(text)
+    await scrollIntoView(textOnScreen, {
+      behavior: 'smooth',
+      block: 'nearest',
+    }).then(() =>
+      createEffect(() => {
+        scrollWidth = createScrollWidth(props.fullTextRef)
+        const totalWidth = scrollWidth() - windowWidth
+        const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
+        setCurrentPage(Math.ceil(maxPage() * percentScrolled))
+      })
+    )
+  }
 
   createEffect((prev) => {
     //TODO is this ever used?
@@ -72,7 +78,9 @@ export const Slider = (props) => {
     if (chapterAndParagraph !== prev && chapterAndParagraph !== ' ') {
       const chapter = chapterAndParagraph.split(' ')[1]
       let paragraph =
-        page() === 0 || page() === 1 ? null : chapterAndParagraph.split(' ')[3]
+        currentPage() === 0 || currentPage() === 1
+          ? null
+          : chapterAndParagraph.split(' ')[3]
       setSearchParams({ chapter: chapter, paragraph: paragraph })
       console.log('read this: ', searchParams.paragraph) //what am I supposed to do with this?
     }
@@ -84,14 +92,14 @@ export const Slider = (props) => {
     if (book !== prev) {
       setChapterClicked(false)
       setResized(false)
-      setPage(0)
+      setCurrentPage(0)
       setMaxPages()
     }
     return book
   }, '')
 
   createEffect((prev) => {
-    const currentSlider = page()
+    const currentSlider = currentPage()
     if (
       currentSlider > prev &&
       chapterClicked() === false &&
@@ -108,13 +116,13 @@ export const Slider = (props) => {
     return currentSlider
   })
 
-  createEffect((prev) => {
+  createEffect(() => {
     const currentChapter = props.percentScrolledToChapter
-    if (currentChapter !== prev) {
+    if (currentChapter !== undefined) {
       setChapterClicked(true)
-      setPage(Math.ceil(maxScroll() * props.percentScrolledToChapter))
+      setCurrentPage(Math.ceil(maxPage() * props.percentScrolledToChapter))
     }
-    return currentChapter
+    props.setPercentScrolledToChapter(undefined)
   })
 
   createEffect(() => {
@@ -126,8 +134,8 @@ export const Slider = (props) => {
   const setMaxPages = () => {
     setTimeout(() => {
       scrollWidth = createScrollWidth(props.fullTextRef)
-      setMaxScroll(Math.ceil(scrollWidth() / windowWidth - 1))
-      sliderRef.setAttribute('max', maxScroll())
+      setMaxPage(Math.ceil(scrollWidth() / windowWidth - 1))
+      sliderRef.setAttribute('max', maxPage())
     }, 300)
   }
 
@@ -136,15 +144,15 @@ export const Slider = (props) => {
   }
 
   const handleSliderChange = (event) => {
-    if (event.which === 37 && page() !== 0) {
+    if (event.which === 37 && currentPage() !== 0) {
       setChapterClicked(false)
       setResized(false)
-      setPage(page() - 1)
+      setCurrentPage(currentPage() - 1)
     }
-    if (event.which === 39 && page() !== maxScroll()) {
+    if (event.which === 39 && currentPage() !== maxPage()) {
       setChapterClicked(false)
       setResized(false)
-      setPage(page() + 1)
+      setCurrentPage(currentPage() + 1)
     }
   }
 
@@ -153,18 +161,20 @@ export const Slider = (props) => {
       <input
         ref={sliderRef}
         type='range'
-        value={page()}
+        value={currentPage()}
         onKeyDown={() => event.preventDefault()}
         onChange={() => {
           setChapterClicked(false)
           setResized(false)
-          setPage(parseInt(event.target.value))
+          setCurrentPage(parseInt(event.target.value))
         }}
         class='w-full'
       />
       <h2>
-        Page {page()} of {maxScroll()}
+        Page {currentPage()} of {maxPage()}
       </h2>
     </div>
   )
 }
+
+//

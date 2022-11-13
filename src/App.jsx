@@ -1,6 +1,7 @@
 //TODO consider going back to using custom function for windowWidth. Or using https://github.com/NukeJS/solidjs-hooks
 //TODO tie search params to what's on screen
 //TODO what about height resize? fs things up
+//TODO bug with being on last page, resizing, and page beign off by one
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'

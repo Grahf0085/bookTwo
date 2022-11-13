@@ -22,6 +22,7 @@
   "dependencies": {
     "@solid-primitives/resize-observer": "^2.0.4",
     "@solidjs/router": "^0.4.3",
+    "smooth-scroll-into-view-if-needed": "^1.1.33",
     "solid-js": "^1.6.1"
   }
 }

@@ -1,6 +1,7 @@
 import { createResource, For } from 'solid-js'
 import { fetchBookChapters } from '../utils/nietzscheAPI.js'
 import { createScrollWidth } from '../utils/createScrollWidth.jsx'
+import scrollIntoView from 'smooth-scroll-into-view-if-needed'
 
 export const ChapterList = (props) => {
   let scrollWidth
@@ -10,31 +11,30 @@ export const ChapterList = (props) => {
     fetchBookChapters
   )
 
-  const handleChapterLink = (chapterNumber) => {
-    document
-      .getElementById(chapterNumber)
-      .scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-    setTimeout(() => {
+  const handleChapterLink = async (chapterNumber) => {
+    const chapter = document.getElementById(chapterNumber)
+    await scrollIntoView(chapter, {
+      behavior: 'smooth',
+      block: 'nearest',
+    }).then(() => {
       scrollWidth = createScrollWidth(props.fullTextRef)
       const totalWidth = scrollWidth() - window.innerWidth
       const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
       props.setPercentScrolledToChapter(percentScrolled)
-    }, 500)
+    })
   }
 
   return (
     <div class='w-full h-full'>
       <For each={fetchedChapterInfo()}>
         {(info) => (
-          <>
-            <h1
-              onClick={() => handleChapterLink(info.chapterNumber)}
-              id={'chapter: chapter-list paragraph: not applicable.'}
-              class='pointer-events-auto cursor-pointer bookParagraphs'
-            >
-              {info.chapterName}
-            </h1>
-          </>
+          <h1
+            onClick={() => handleChapterLink(info.chapterNumber)}
+            id={'chapter: chapter-list paragraph: not applicable.'}
+            class='pointer-events-auto cursor-pointer bookParagraphs'
+          >
+            {info.chapterName}
+          </h1>
         )}
       </For>
     </div>

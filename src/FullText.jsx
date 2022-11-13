@@ -37,6 +37,7 @@ export const FullText = (props) => {
             translator={translator()}
             fullTextRef={fullTextRef}
             setPercentScrolledToChapter={setPercentScrolledToChapter}
+            paragraphsLoaded={paragraphsLoaded()}
           />
           <Chapters
             title={title()}
@@ -51,6 +52,7 @@ export const FullText = (props) => {
         title={title()}
         translator={translator()}
         percentScrolledToChapter={percentScrolledToChapter()}
+        setPercentScrolledToChapter={setPercentScrolledToChapter}
         paragraphsLoaded={paragraphsLoaded()}
       />
     </div>
