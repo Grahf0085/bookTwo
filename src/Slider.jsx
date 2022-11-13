@@ -44,7 +44,6 @@ export const Slider = (props) => {
   createEffect((prev) => {
     windowWidth = windowSize.width
     if (windowWidth !== prev) {
-      setResized(true)
       setMaxPages()
       handleWindowChange(textOnScreen())
     }
@@ -57,14 +56,13 @@ export const Slider = (props) => {
       behavior: 'smooth',
       block: 'nearest',
     })
-      .then(() =>
-        createEffect(() => {
-          scrollWidth = createScrollWidth(props.fullTextRef)
-          const totalWidth = scrollWidth() - windowWidth
-          const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
-          setCurrentPage(Math.ceil(maxPage() * percentScrolled))
-        })
-      )
+      .then(() => {
+        scrollWidth = createScrollWidth(props.fullTextRef)
+        const totalWidth = scrollWidth() - windowWidth
+        const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
+        setResized(true)
+        setCurrentPage(Math.ceil(maxPage() * percentScrolled))
+      })
       .finally(() => setResized(false))
   }
 
