@@ -56,29 +56,29 @@ export const Slider = (props) => {
     await scrollIntoView(textOnScreen, {
       behavior: 'smooth',
       block: 'nearest',
-    }).then(() =>
-      createEffect(() => {
-        scrollWidth = createScrollWidth(props.fullTextRef)
-        const totalWidth = scrollWidth() - windowWidth
-        const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
-        setCurrentPage(Math.ceil(maxPage() * percentScrolled))
-      }).finally(() => setResized(false))
-    )
+    })
+      .then(() =>
+        createEffect(() => {
+          scrollWidth = createScrollWidth(props.fullTextRef)
+          const totalWidth = scrollWidth() - windowWidth
+          const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
+          setCurrentPage(Math.ceil(maxPage() * percentScrolled))
+        })
+      )
+      .finally(() => setResized(false))
   }
 
-  createEffect((prev) => {
-    const chapterAndParagraph = textOnScreen()
-    if (chapterAndParagraph !== prev && chapterAndParagraph !== ' ') {
-      const chapter = chapterAndParagraph.split(' ')[1]
+  createEffect(() => {
+    if (textOnScreen() !== ' ') {
+      const chapter = textOnScreen().split(' ')[1]
       let paragraph =
         currentPage() === 0 || currentPage() === 1
           ? null
-          : chapterAndParagraph.split(' ')[3]
+          : textOnScreen().split(' ')[3]
       setSearchParams({ chapter: chapter, paragraph: paragraph })
       console.log('read this: ', searchParams.paragraph) //what am I supposed to do with this?
     }
-    return chapterAndParagraph
-  }, '')
+  })
 
   createEffect((prev) => {
     const book = `${props.title} + ${props.translator}`
@@ -165,5 +165,3 @@ export const Slider = (props) => {
     </div>
   )
 }
-
-//
