@@ -81,7 +81,6 @@ export const Slider = (props) => {
   createEffect((prev) => {
     const book = `${props.title} + ${props.translator}`
     if (book !== prev) {
-      setChapterClicked(false)
       setCurrentPage(0)
       setMaxPages()
     }
@@ -113,6 +112,7 @@ export const Slider = (props) => {
       setCurrentPage(Math.ceil(maxPage() * props.percentScrolledToChapter))
     }
     props.setPercentScrolledToChapter(undefined)
+    Promise.resolve().then(() => setChapterClicked(false))
   })
 
   createEffect(() => {
@@ -135,11 +135,9 @@ export const Slider = (props) => {
 
   const handleSliderChange = (event) => {
     if (event.which === 37 && currentPage() !== 0) {
-      setChapterClicked(false)
       setCurrentPage(currentPage() - 1)
     }
     if (event.which === 39 && currentPage() !== maxPage()) {
-      setChapterClicked(false)
       setCurrentPage(currentPage() + 1)
     }
   }
@@ -152,7 +150,6 @@ export const Slider = (props) => {
         value={currentPage()}
         onKeyDown={() => event.preventDefault()}
         onChange={() => {
-          setChapterClicked(false)
           setCurrentPage(parseInt(event.target.value))
         }}
         class='w-full'
