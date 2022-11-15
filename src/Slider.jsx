@@ -122,11 +122,13 @@ export const Slider = (props) => {
   })
 
   const setMaxPages = () => {
-    setTimeout(() => {
-      scrollWidth = createScrollWidth(props.fullTextRef)
-      setMaxPage(Math.ceil(scrollWidth() / windowWidth - 1))
-      sliderRef.setAttribute('max', maxPage())
-    }, 300)
+    createEffect(() => {
+      if (props.paragraphsLoaded === 'ready') {
+        scrollWidth = createScrollWidth(props.fullTextRef)
+        setMaxPage(Math.ceil(scrollWidth() / windowWidth - 1))
+        sliderRef.setAttribute('max', maxPage())
+      }
+    })
   }
 
   const scroll = (scrollOffset) => {
