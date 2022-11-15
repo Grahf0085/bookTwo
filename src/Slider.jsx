@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from 'solid-js'
+import { createEffect, createSignal, onMount } from 'solid-js'
 import { createScrollWidth } from './utils/createScrollWidth.jsx'
 import { useWindowSize } from '@solid-primitives/resize-observer'
 import { useSearchParams } from '@solidjs/router'
@@ -85,7 +85,7 @@ export const Slider = (props) => {
       setMaxPages()
     }
     return book
-  }, '')
+  })
 
   createEffect((prev) => {
     const currentSlider = currentPage()
@@ -115,7 +115,7 @@ export const Slider = (props) => {
     Promise.resolve().then(() => setChapterClicked(false))
   })
 
-  createEffect(() => {
+  onMount(() => {
     props.rootDivRef.addEventListener('keydown', () =>
       handleSliderChange(event)
     )
@@ -136,12 +136,10 @@ export const Slider = (props) => {
   }
 
   const handleSliderChange = (event) => {
-    if (event.which === 37 && currentPage() !== 0) {
+    if (event.which === 37 && currentPage() !== 0)
       setCurrentPage(currentPage() - 1)
-    }
-    if (event.which === 39 && currentPage() !== maxPage()) {
+    if (event.which === 39 && currentPage() !== maxPage())
       setCurrentPage(currentPage() + 1)
-    }
   }
 
   return (
