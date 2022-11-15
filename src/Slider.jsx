@@ -11,7 +11,6 @@ export const Slider = (props) => {
 
   const [currentPage, setCurrentPage] = createSignal(0)
   const [maxPage, setMaxPage] = createSignal(0)
-  const [chapterClicked, setChapterClicked] = createSignal(false)
   const [resized, setResized] = createSignal(false)
   const [textOnScreen, setTextOnScreen] = createSignal(' ')
 
@@ -91,13 +90,13 @@ export const Slider = (props) => {
     const currentSlider = currentPage()
     if (
       currentSlider > prev &&
-      chapterClicked() === false &&
+      props.percentScrolledToChapter === undefined &&
       resized() === false
     )
       scroll(windowWidth * (currentSlider - prev))
     if (
       currentSlider < prev &&
-      chapterClicked() === false &&
+      props.percentScrolledToChapter === undefined &&
       resized() === false
     )
       scroll(-windowWidth * (prev - currentSlider))
@@ -108,11 +107,9 @@ export const Slider = (props) => {
   createEffect(() => {
     const currentChapter = props.percentScrolledToChapter
     if (currentChapter !== undefined) {
-      setChapterClicked(true)
       setCurrentPage(Math.ceil(maxPage() * props.percentScrolledToChapter))
     }
-    props.setPercentScrolledToChapter(undefined)
-    Promise.resolve().then(() => setChapterClicked(false))
+    Promise.resolve().then(() => props.setPercentScrolledToChapter(undefined))
   })
 
   onMount(() => {
