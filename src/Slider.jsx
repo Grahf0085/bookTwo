@@ -8,10 +8,10 @@ export const Slider = (props) => {
   let sliderRef
   let windowWidth
   let scrollWidth
+  let percentScrolled
 
   const [currentPage, setCurrentPage] = createSignal(0)
   const [maxPage, setMaxPage] = createSignal(0)
-  const [resized, setResized] = createSignal(false)
   const [textOnScreen, setTextOnScreen] = createSignal(' ')
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -58,17 +58,16 @@ export const Slider = (props) => {
       .then(() => {
         scrollWidth = createScrollWidth(props.fullTextRef)
         const totalWidth = scrollWidth() - windowWidth
-        const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
-        setResized(true)
+        percentScrolled = props.fullTextRef.scrollLeft / totalWidth
         setCurrentPage(Math.ceil(maxPage() * percentScrolled))
       })
-      .finally(() => setResized(false))
+      .finally(() => (percentScrolled = 0))
   }
 
   createEffect(() => {
     if (textOnScreen() !== ' ') {
       const chapter = textOnScreen().split(' ')[1]
-      let paragraph =
+      const paragraph =
         currentPage() === 0 || currentPage() === 1
           ? null
           : textOnScreen().split(' ')[3]
@@ -89,26 +88,19 @@ export const Slider = (props) => {
   createEffect((prev) => {
     const currentSlider = currentPage()
     if (
-      currentSlider > prev &&
       props.percentScrolledToChapter === undefined &&
-      resized() === false
-    )
-      scroll(windowWidth * (currentSlider - prev))
-    if (
-      currentSlider < prev &&
-      props.percentScrolledToChapter === undefined &&
-      resized() === false
-    )
-      scroll(-windowWidth * (prev - currentSlider))
-
+      !(percentScrolled > 0)
+    ) {
+      if (currentSlider > prev) scroll(windowWidth * (currentSlider - prev))
+      if (currentSlider < prev) scroll(-windowWidth * (prev - currentSlider))
+    }
     return currentSlider
   })
 
   createEffect(() => {
     const currentChapter = props.percentScrolledToChapter
-    if (currentChapter !== undefined) {
+    if (currentChapter !== undefined)
       setCurrentPage(Math.ceil(maxPage() * props.percentScrolledToChapter))
-    }
     Promise.resolve().then(() => props.setPercentScrolledToChapter(undefined))
   })
 
