@@ -1,14 +1,20 @@
-import { createEffect, createSignal, onMount } from 'solid-js'
-import { createScrollWidth } from './utils/createScrollWidth.jsx'
-import { useWindowSize } from '@solid-primitives/resize-observer'
+import { onMount, createSignal, createEffect } from 'solid-js'
 import { useSearchParams } from '@solidjs/router'
+import { useWindowSize } from '@solid-primitives/resize-observer'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
+import { createScrollWidth } from './utils/createScrollWidth.jsx'
 
 export const Slider = (props) => {
   let sliderRef
   let windowWidth
   let scrollWidth
   let percentScrolled
+
+  const observerOptions = {
+    root: null, // relative to document viewport
+    rootMargin: '0px', // margin around root. Values are similar to css property. Unitless values not allowed
+    threshold: 1.0, // visible amount of item shown in relation to root
+  }
 
   const [currentPage, setCurrentPage] = createSignal(0)
   const [maxPage, setMaxPage] = createSignal(0)
@@ -18,36 +24,11 @@ export const Slider = (props) => {
 
   const windowSize = useWindowSize()
 
-  const options = {
-    root: null, // relative to document viewport
-    rootMargin: '0px', // margin around root. Values are similar to css property. Unitless values not allowed
-    threshold: 1.0, // visible amount of item shown in relation to root
-  }
-
-  createEffect(() => {
-    if (props.paragraphsLoaded === 'ready') {
-      const paragraphs = document.querySelectorAll('.bookParagraphs')
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.intersectionRatio > 0) {
-            setTextOnScreen(entry.target.id)
-          }
-        })
-      }, options)
-      paragraphs.forEach((paragraph) => {
-        observer.observe(paragraph)
-      })
-    }
+  onMount(() => {
+    props.rootDivRef.addEventListener('keydown', () =>
+      handleSliderChange(event)
+    )
   })
-
-  createEffect((prev) => {
-    windowWidth = windowSize.width
-    if (windowWidth !== prev) {
-      setMaxPages()
-      handleWindowChange(textOnScreen())
-    }
-    return windowWidth
-  }, windowSize.width)
 
   const handleWindowChange = async (text) => {
     const textOnScreen = document.getElementById(text)
@@ -63,6 +44,51 @@ export const Slider = (props) => {
       })
       .finally(() => (percentScrolled = 0))
   }
+
+  const setMaxPages = () => {
+    createEffect(() => {
+      if (props.paragraphsLoaded === 'ready') {
+        scrollWidth = createScrollWidth(props.fullTextRef)
+        setMaxPage(Math.ceil(scrollWidth() / windowWidth - 1))
+        sliderRef.setAttribute('max', maxPage())
+      }
+    })
+  }
+
+  const scroll = (scrollOffset) =>
+    (props.fullTextRef.scrollLeft += scrollOffset)
+
+  const handleSliderChange = (event) => {
+    if (event.which === 37 && currentPage() !== 0)
+      setCurrentPage(currentPage() - 1)
+    if (event.which === 39 && currentPage() !== maxPage())
+      setCurrentPage(currentPage() + 1)
+  }
+
+  createEffect(() => {
+    if (props.paragraphsLoaded === 'ready') {
+      const paragraphs = document.querySelectorAll('.bookParagraphs')
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.intersectionRatio > 0) {
+            setTextOnScreen(entry.target.id)
+          }
+        })
+      }, observerOptions)
+      paragraphs.forEach((paragraph) => {
+        observer.observe(paragraph)
+      })
+    }
+  })
+
+  createEffect((prev) => {
+    windowWidth = windowSize.width
+    if (windowWidth !== prev) {
+      setMaxPages()
+      handleWindowChange(textOnScreen())
+    }
+    return windowWidth
+  }, windowSize.width)
 
   createEffect(() => {
     if (textOnScreen() !== ' ') {
@@ -103,33 +129,6 @@ export const Slider = (props) => {
       setCurrentPage(Math.ceil(maxPage() * props.percentScrolledToChapter))
     Promise.resolve().then(() => props.setPercentScrolledToChapter(undefined))
   })
-
-  onMount(() => {
-    props.rootDivRef.addEventListener('keydown', () =>
-      handleSliderChange(event)
-    )
-  })
-
-  const setMaxPages = () => {
-    createEffect(() => {
-      if (props.paragraphsLoaded === 'ready') {
-        scrollWidth = createScrollWidth(props.fullTextRef)
-        setMaxPage(Math.ceil(scrollWidth() / windowWidth - 1))
-        sliderRef.setAttribute('max', maxPage())
-      }
-    })
-  }
-
-  const scroll = (scrollOffset) => {
-    props.fullTextRef.scrollLeft += scrollOffset
-  }
-
-  const handleSliderChange = (event) => {
-    if (event.which === 37 && currentPage() !== 0)
-      setCurrentPage(currentPage() - 1)
-    if (event.which === 39 && currentPage() !== maxPage())
-      setCurrentPage(currentPage() + 1)
-  }
 
   return (
     <div class='grid grid-cols-1 gap-5 w-11/12 self-center py-5 mt-auto pointer-events-auto'>
