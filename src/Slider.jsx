@@ -9,6 +9,7 @@ export const Slider = (props) => {
   let windowWidth
   let scrollWidth
   let percentScrolled
+  const visibleParagraphs = []
 
   const observerOptions = {
     root: null, // relative to document viewport
@@ -70,8 +71,9 @@ export const Slider = (props) => {
       const paragraphs = document.querySelectorAll('.bookParagraphs')
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (entry.intersectionRatio > 0) {
-            setTextOnScreen(entry.target.id)
+          if (entry.isIntersecting) {
+            visibleParagraphs.push(entry.target.id)
+            setTextOnScreen(visibleParagraphs[0])
           }
         })
       }, observerOptions)
@@ -113,6 +115,7 @@ export const Slider = (props) => {
 
   createEffect((prev) => {
     const currentSlider = currentPage()
+    visibleParagraphs.length = 0
     if (
       props.percentScrolledToChapter === undefined &&
       !(percentScrolled > 0)
