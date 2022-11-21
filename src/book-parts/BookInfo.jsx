@@ -10,10 +10,7 @@ export const BookInfo = (props) => {
   return (
     <For each={fetchedBookInfo()}>
       {(info) => (
-        <div
-          id={'chapter: book-info paragraph: not applicable.'}
-          class='w-full h-full bookParagraphs'
-        >
+        <div id={'chapter: book-info'} class='w-full h-full bookParagraphs'>
           <h1>{info.title}</h1>
           <h1>{info.pubDate}</h1>
           <h1>{info.translatorName}</h1>

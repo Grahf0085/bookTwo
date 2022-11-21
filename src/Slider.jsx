@@ -1,4 +1,4 @@
-import { onMount, createSignal, createEffect } from 'solid-js'
+import { onMount, createSignal, createEffect, createMemo } from 'solid-js'
 import { useSearchParams } from '@solidjs/router'
 import { useWindowSize } from '@solid-primitives/resize-observer'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
@@ -7,9 +7,10 @@ import { createScrollWidth } from './utils/createScrollWidth.jsx'
 export const Slider = (props) => {
   let sliderRef
   let windowWidth
+  let windowHeight
   let scrollWidth
   let percentScrolled
-  const visibleParagraphs = []
+  /* let visibleParagraphs = [] */
 
   const observerOptions = {
     root: null, // relative to document viewport
@@ -18,12 +19,22 @@ export const Slider = (props) => {
   }
 
   const [currentPage, setCurrentPage] = createSignal(0)
-  const [maxPage, setMaxPage] = createSignal(0)
   const [textOnScreen, setTextOnScreen] = createSignal(' ')
 
   const [searchParams, setSearchParams] = useSearchParams()
 
   const windowSize = useWindowSize()
+
+  const maxPage = createMemo(() => {
+    if (props.paragraphsLoaded === 'ready') {
+      const scrollWidth = createScrollWidth(props.fullTextRef)
+      return Math.ceil(scrollWidth() / windowWidth - 1)
+    }
+  })
+
+  createEffect(() => {
+    sliderRef.setAttribute('max', maxPage())
+  })
 
   onMount(() => {
     props.rootDivRef.addEventListener('keydown', () =>
@@ -46,16 +57,6 @@ export const Slider = (props) => {
       .finally(() => (percentScrolled = 0))
   }
 
-  const setMaxPages = () => {
-    createEffect(() => {
-      if (props.paragraphsLoaded === 'ready') {
-        scrollWidth = createScrollWidth(props.fullTextRef)
-        setMaxPage(Math.ceil(scrollWidth() / windowWidth - 1))
-        sliderRef.setAttribute('max', maxPage())
-      }
-    })
-  }
-
   const scroll = (scrollOffset) =>
     (props.fullTextRef.scrollLeft += scrollOffset)
 
@@ -70,10 +71,12 @@ export const Slider = (props) => {
     if (props.paragraphsLoaded === 'ready') {
       const paragraphs = document.querySelectorAll('.bookParagraphs')
       const observer = new IntersectionObserver((entries) => {
+        /* visibleParagraphs = [] */
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            visibleParagraphs.push(entry.target.id)
-            setTextOnScreen(visibleParagraphs[0])
+            setTextOnScreen(entry.target.id)
+            /* visibleParagraphs.push(entry.target.id) */
+            /* setTextOnScreen(visibleParagraphs[0]) */
           }
         })
       }, observerOptions)
@@ -86,11 +89,18 @@ export const Slider = (props) => {
   createEffect((prev) => {
     windowWidth = windowSize.width
     if (windowWidth !== prev) {
-      setMaxPages()
       handleWindowChange(textOnScreen())
     }
     return windowWidth
   }, windowSize.width)
+
+  createEffect((prev) => {
+    windowHeight = windowSize.height
+    if (windowHeight !== prev) {
+      handleWindowChange(textOnScreen())
+    }
+    return windowHeight
+  }, windowSize.height)
 
   createEffect(() => {
     if (textOnScreen() !== ' ') {
@@ -108,14 +118,12 @@ export const Slider = (props) => {
     const book = `${props.title} + ${props.translator}`
     if (book !== prev) {
       setCurrentPage(0)
-      setMaxPages()
     }
     return book
   })
 
   createEffect((prev) => {
     const currentSlider = currentPage()
-    visibleParagraphs.length = 0
     if (
       props.percentScrolledToChapter === undefined &&
       !(percentScrolled > 0)
@@ -134,7 +142,7 @@ export const Slider = (props) => {
   })
 
   return (
-    <div class='grid grid-cols-1 gap-5 w-11/12 self-center py-5 mt-auto pointer-events-auto'>
+    <div class='grid grid-cols-1 gap-5 w-11/12 self-center py-5 mt-auto'>
       <input
         ref={sliderRef}
         type='range'

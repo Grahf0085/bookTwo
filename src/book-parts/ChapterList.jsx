@@ -25,14 +25,13 @@ export const ChapterList = (props) => {
   }
 
   return (
-    <div class='w-full h-full'>
+    <div
+      class='w-full h-full cursor-pointer bookParagraphs'
+      id={'chapter: chapter-list'}
+    >
       <For each={fetchedChapterInfo()}>
         {(info) => (
-          <h1
-            onClick={() => handleChapterLink(info.chapterNumber)}
-            id={'chapter: chapter-list paragraph: not applicable.'}
-            class='pointer-events-auto cursor-pointer bookParagraphs'
-          >
+          <h1 onClick={() => handleChapterLink(info.chapterNumber)}>
             {info.chapterName}
           </h1>
         )}
