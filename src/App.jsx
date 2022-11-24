@@ -1,7 +1,7 @@
-//TODO consider going back to using custom function for windowWidth. Or using https://github.com/NukeJS/solidjs-hooks
 //TODO tie search params to what's on screen
 //TODO replace setting signals in createEffects with memos
-//TODO don't change search params when resizing window
+//TODO continue to improve paragraph focus when changing window size
+//TODO refactor to remove duplicate code
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'

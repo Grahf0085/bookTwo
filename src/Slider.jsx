@@ -6,11 +6,11 @@ import { createScrollWidth } from './utils/createScrollWidth.jsx'
 
 export const Slider = (props) => {
   let sliderRef
-  let windowWidth
-  let windowHeight
   let scrollWidth
   let percentScrolled
-  /* let visibleParagraphs = [] */
+  let visibleParagraphs = []
+  let paragraphs
+  let observer
 
   const observerOptions = {
     root: null, // relative to document viewport
@@ -20,15 +20,20 @@ export const Slider = (props) => {
 
   const [currentPage, setCurrentPage] = createSignal(0)
   const [textOnScreen, setTextOnScreen] = createSignal(' ')
+  const [windowWidth, setWindowWidth] = createSignal(0)
+  const [windowHeight, setWindowHeight] = createSignal(0)
 
   const [searchParams, setSearchParams] = useSearchParams()
 
   const windowSize = useWindowSize()
 
   const maxPage = createMemo(() => {
-    if (props.paragraphsLoaded === 'ready') {
+    if (
+      props.paragraphsLoaded === 'ready' &&
+      (windowHeight() > 0 || windowWidth() > 0)
+    ) {
       const scrollWidth = createScrollWidth(props.fullTextRef)
-      return Math.ceil(scrollWidth() / windowWidth - 1)
+      return Math.ceil(scrollWidth() / windowWidth() - 1)
     }
   })
 
@@ -48,13 +53,18 @@ export const Slider = (props) => {
       behavior: 'smooth',
       block: 'nearest',
     })
-      .then(() => {
-        scrollWidth = createScrollWidth(props.fullTextRef)
-        const totalWidth = scrollWidth() - windowWidth
-        percentScrolled = props.fullTextRef.scrollLeft / totalWidth
-        setCurrentPage(Math.ceil(maxPage() * percentScrolled))
+      .then(() =>
+        createEffect(() => {
+          scrollWidth = createScrollWidth(props.fullTextRef)
+          const totalWidth = scrollWidth() - windowWidth()
+          percentScrolled = props.fullTextRef.scrollLeft / totalWidth
+          setCurrentPage(Math.ceil(maxPage() * percentScrolled))
+        })
+      )
+      .finally(() => {
+        paragraphs.forEach((paragraph) => observer.observe(paragraph))
+        percentScrolled = 0
       })
-      .finally(() => (percentScrolled = 0))
   }
 
   const scroll = (scrollOffset) =>
@@ -69,37 +79,35 @@ export const Slider = (props) => {
 
   createEffect(() => {
     if (props.paragraphsLoaded === 'ready') {
-      const paragraphs = document.querySelectorAll('.bookParagraphs')
-      const observer = new IntersectionObserver((entries) => {
-        /* visibleParagraphs = [] */
+      paragraphs = document.querySelectorAll('.bookParagraphs')
+      observer = new IntersectionObserver((entries) => {
+        visibleParagraphs = []
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setTextOnScreen(entry.target.id)
-            /* visibleParagraphs.push(entry.target.id) */
-            /* setTextOnScreen(visibleParagraphs[0]) */
+            visibleParagraphs.push(entry.target.id)
+            setTextOnScreen(visibleParagraphs[0])
           }
         })
       }, observerOptions)
-      paragraphs.forEach((paragraph) => {
-        observer.observe(paragraph)
-      })
+      paragraphs.forEach((paragraph) => observer.observe(paragraph))
     }
   })
 
   createEffect((prev) => {
-    windowWidth = windowSize.width
-    if (windowWidth !== prev) {
-      handleWindowChange(textOnScreen())
-    }
+    const windowWidth = windowSize.width
+    setWindowWidth(windowWidth)
+    if (windowWidth !== prev) handleWindowChange(textOnScreen())
     return windowWidth
   }, windowSize.width)
 
   createEffect((prev) => {
-    windowHeight = windowSize.height
-    if (windowHeight !== prev) {
+    const windowHeightLocal = windowSize.height
+    setWindowHeight(windowHeightLocal)
+    if (windowHeightLocal !== prev) {
+      paragraphs.forEach((paragraph) => observer.unobserve(paragraph))
       handleWindowChange(textOnScreen())
     }
-    return windowHeight
+    return windowHeightLocal
   }, windowSize.height)
 
   createEffect(() => {
@@ -116,9 +124,7 @@ export const Slider = (props) => {
 
   createEffect((prev) => {
     const book = `${props.title} + ${props.translator}`
-    if (book !== prev) {
-      setCurrentPage(0)
-    }
+    if (book !== prev) setCurrentPage(0)
     return book
   })
 
@@ -128,8 +134,8 @@ export const Slider = (props) => {
       props.percentScrolledToChapter === undefined &&
       !(percentScrolled > 0)
     ) {
-      if (currentSlider > prev) scroll(windowWidth * (currentSlider - prev))
-      if (currentSlider < prev) scroll(-windowWidth * (prev - currentSlider))
+      if (currentSlider > prev) scroll(windowWidth() * (currentSlider - prev))
+      if (currentSlider < prev) scroll(-windowWidth() * (prev - currentSlider))
     }
     return currentSlider
   })
