@@ -1,7 +1,9 @@
 //TODO tie search params to what's on screen
 //TODO replace setting signals in createEffects with memos
-//TODO continue to improve paragraph focus when changing window size
 //TODO refactor to remove duplicate code
+//TODO use solid observer?
+//TODO scrollWidth condition
+//TODO remove depricated events
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'

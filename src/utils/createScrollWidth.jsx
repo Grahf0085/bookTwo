@@ -16,5 +16,5 @@ export const createScrollWidth = (div) => {
     return () => div.removeEventListener('MutationObserver', handleResize)
   })
 
-  return scrollWidth
+  return scrollWidth()
 }

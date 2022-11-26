@@ -1,4 +1,4 @@
-import { onMount, createSignal, createEffect, createMemo } from 'solid-js'
+import { onMount, createSignal, createEffect } from 'solid-js'
 import { useSearchParams } from '@solidjs/router'
 import { useWindowSize } from '@solid-primitives/resize-observer'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
@@ -6,7 +6,6 @@ import { createScrollWidth } from './utils/createScrollWidth.jsx'
 
 export const Slider = (props) => {
   let sliderRef
-  let scrollWidth
   let percentScrolled
   let visibleParagraphs = []
   let paragraphs
@@ -27,24 +26,27 @@ export const Slider = (props) => {
 
   const windowSize = useWindowSize()
 
-  const maxPage = createMemo(() => {
+  const scrollWidth = () => {
     if (
       props.paragraphsLoaded === 'ready' &&
       (windowHeight() > 0 || windowWidth() > 0)
-    ) {
-      const scrollWidth = createScrollWidth(props.fullTextRef)
-      return Math.ceil(scrollWidth() / windowWidth() - 1)
-    }
-  })
+    )
+      return createScrollWidth(props.fullTextRef)
+  }
+
+  const maxPage = () => Math.ceil(scrollWidth() / windowWidth() - 1)
 
   createEffect(() => {
     sliderRef.setAttribute('max', maxPage())
   })
 
   onMount(() => {
-    props.rootDivRef.addEventListener('keydown', () =>
-      handleSliderChange(event)
-    )
+    props.rootDivRef.addEventListener('keydown', () => {
+      if (event.key === 'ArrowLeft' && currentPage() !== 0)
+        setCurrentPage(currentPage() - 1)
+      if (event.key === 'ArrowRight' && currentPage() !== maxPage())
+        setCurrentPage(currentPage() + 1)
+    })
   })
 
   const handleWindowChange = async (text) => {
@@ -55,7 +57,6 @@ export const Slider = (props) => {
     })
       .then(() =>
         createEffect(() => {
-          scrollWidth = createScrollWidth(props.fullTextRef)
           const totalWidth = scrollWidth() - windowWidth()
           percentScrolled = props.fullTextRef.scrollLeft / totalWidth
           setCurrentPage(Math.ceil(maxPage() * percentScrolled))
@@ -69,13 +70,6 @@ export const Slider = (props) => {
 
   const scroll = (scrollOffset) =>
     (props.fullTextRef.scrollLeft += scrollOffset)
-
-  const handleSliderChange = (event) => {
-    if (event.which === 37 && currentPage() !== 0)
-      setCurrentPage(currentPage() - 1)
-    if (event.which === 39 && currentPage() !== maxPage())
-      setCurrentPage(currentPage() + 1)
-  }
 
   createEffect(() => {
     if (props.paragraphsLoaded === 'ready') {
@@ -141,8 +135,7 @@ export const Slider = (props) => {
   })
 
   createEffect(() => {
-    const currentChapter = props.percentScrolledToChapter
-    if (currentChapter !== undefined)
+    if (props.percentScrolledToChapter !== undefined)
       setCurrentPage(Math.ceil(maxPage() * props.percentScrolledToChapter))
     Promise.resolve().then(() => props.setPercentScrolledToChapter(undefined))
   })
@@ -154,9 +147,7 @@ export const Slider = (props) => {
         type='range'
         value={currentPage()}
         onKeyDown={() => event.preventDefault()}
-        onChange={() => {
-          setCurrentPage(parseInt(event.target.value))
-        }}
+        onChange={() => setCurrentPage(parseInt(event.target.value))}
         class='w-full'
       />
       <h2>

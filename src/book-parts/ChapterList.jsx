@@ -18,7 +18,7 @@ export const ChapterList = (props) => {
       block: 'nearest',
     }).then(() => {
       scrollWidth = createScrollWidth(props.fullTextRef)
-      const totalWidth = scrollWidth() - window.innerWidth
+      const totalWidth = scrollWidth - window.innerWidth
       const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
       props.setPercentScrolledToChapter(percentScrolled)
     })
