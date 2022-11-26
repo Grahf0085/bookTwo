@@ -2,7 +2,6 @@ import { onMount, createSignal, createEffect } from 'solid-js'
 import { useSearchParams } from '@solidjs/router'
 import { useWindowSize } from '@solid-primitives/resize-observer'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
-import { createScrollWidth } from './utils/createScrollWidth.jsx'
 
 export const Slider = (props) => {
   let sliderRef
@@ -26,19 +25,16 @@ export const Slider = (props) => {
 
   const windowSize = useWindowSize()
 
-  const scrollWidth = () => {
+  const scrollWidth = () => props.fullTextRef.scrollWidth
+
+  const maxPage = () => {
     if (
       props.paragraphsLoaded === 'ready' &&
-      (windowHeight() > 0 || windowWidth() > 0)
+      windowHeight() > 0 &&
+      windowWidth() > 0
     )
-      return createScrollWidth(props.fullTextRef)
+      return Math.ceil(scrollWidth() / windowWidth() - 1)
   }
-
-  const maxPage = () => Math.ceil(scrollWidth() / windowWidth() - 1)
-
-  createEffect(() => {
-    sliderRef.setAttribute('max', maxPage())
-  })
 
   onMount(() => {
     props.rootDivRef.addEventListener('keydown', () => {
@@ -71,6 +67,8 @@ export const Slider = (props) => {
   const scroll = (scrollOffset) =>
     (props.fullTextRef.scrollLeft += scrollOffset)
 
+  createEffect(() => sliderRef.setAttribute('max', maxPage()))
+
   createEffect(() => {
     if (props.paragraphsLoaded === 'ready') {
       paragraphs = document.querySelectorAll('.bookParagraphs')
@@ -87,22 +85,20 @@ export const Slider = (props) => {
     }
   })
 
-  createEffect((prev) => {
-    const windowWidth = windowSize.width
-    setWindowWidth(windowWidth)
-    if (windowWidth !== prev) handleWindowChange(textOnScreen())
-    return windowWidth
-  }, windowSize.width)
+  createEffect(() => {
+    const windowWidthLocal = windowSize.width
+    setWindowWidth(windowWidthLocal)
+    if (textOnScreen() !== ' ') handleWindowChange(textOnScreen())
+  })
 
-  createEffect((prev) => {
+  createEffect(() => {
     const windowHeightLocal = windowSize.height
     setWindowHeight(windowHeightLocal)
-    if (windowHeightLocal !== prev) {
+    if (paragraphs)
       paragraphs.forEach((paragraph) => observer.unobserve(paragraph))
-      handleWindowChange(textOnScreen())
-    }
+    if (textOnScreen() !== ' ') handleWindowChange(textOnScreen())
     return windowHeightLocal
-  }, windowSize.height)
+  })
 
   createEffect(() => {
     if (textOnScreen() !== ' ') {

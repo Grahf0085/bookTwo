@@ -4,6 +4,7 @@
 //TODO use solid observer?
 //TODO scrollWidth condition
 //TODO remove depricated events
+//TODO NAN flashing for maxPage
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'
