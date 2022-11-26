@@ -34,6 +34,7 @@ export const Slider = (props) => {
       windowWidth() > 0
     )
       return Math.ceil(scrollWidth() / windowWidth() - 1)
+    else return 0
   }
 
   onMount(() => {

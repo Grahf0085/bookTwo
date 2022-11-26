@@ -1,11 +1,8 @@
 import { createResource, For } from 'solid-js'
 import { fetchBookChapters } from '../utils/nietzscheAPI.js'
-import { createScrollWidth } from '../utils/createScrollWidth.jsx'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
 
 export const ChapterList = (props) => {
-  let scrollWidth
-
   const [fetchedChapterInfo] = createResource(
     () => [props.title, props.translator],
     fetchBookChapters
@@ -17,8 +14,8 @@ export const ChapterList = (props) => {
       behavior: 'smooth',
       block: 'nearest',
     }).then(() => {
-      scrollWidth = createScrollWidth(props.fullTextRef)
-      const totalWidth = scrollWidth - window.innerWidth
+      const scrollWidth = () => props.fullTextRef.scrollWidth
+      const totalWidth = scrollWidth() - window.innerWidth
       const percentScrolled = props.fullTextRef.scrollLeft / totalWidth
       props.setPercentScrolledToChapter(percentScrolled)
     })
