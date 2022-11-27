@@ -1,6 +1,6 @@
 import { For, createSignal, createResource, onMount } from 'solid-js'
 import { Link } from '@solidjs/router'
-import { fetchTitles, fetchTranslators } from '../utils/nietzscheAPI.js'
+import { fetchTitles, fetchTranslators } from '../../utils/nietzscheAPI.js'
 
 export const NavLinks = (props) => {
   const [heading, setHeading] = createSignal('')

@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js'
 import { Link } from '@solidjs/router'
 import { NavLinks } from './NavLinks.jsx'
-import face from '../assets/face.png'
+import face from '../../assets/face.png'
 
 export const Nav = (props) => {
   const [open, setOpen] = createSignal(false)

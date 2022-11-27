@@ -1,8 +1,8 @@
 import { createSignal, createEffect } from 'solid-js'
 import { useParams } from '@solidjs/router'
-import { BookInfo } from './book-parts/BookInfo.jsx'
-import { ChapterList } from './book-parts/ChapterList.jsx'
-import { Chapters } from './book-parts/Chapters.jsx'
+import { BookInfo } from './BookInfo.jsx'
+import { ChapterList } from './ChapterList.jsx'
+import { Chapters } from './Chapters.jsx'
 import { Slider } from './Slider.jsx'
 
 export const FullText = (props) => {

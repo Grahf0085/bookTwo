@@ -1,5 +1,5 @@
 import { createResource, For, Suspense } from 'solid-js'
-import { fetchBookChapters } from '../utils/nietzscheAPI.js'
+import { fetchBookChapters } from '../../utils/nietzscheAPI.js'
 import { Paragraphs } from './Paragraphs.jsx'
 
 export const Chapters = (props) => {

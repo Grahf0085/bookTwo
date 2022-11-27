@@ -1,5 +1,5 @@
 import { createEffect, onCleanup, createResource, For } from 'solid-js'
-import { fetchChapterParagraphs } from '../utils/nietzscheAPI.js'
+import { fetchChapterParagraphs } from '../../utils/nietzscheAPI.js'
 
 export const Paragraphs = (props) => {
   const [fetchedChapterParagraphs] = createResource(

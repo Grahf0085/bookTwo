@@ -1,5 +1,5 @@
 import { createResource, For } from 'solid-js'
-import { fetchBookInfo } from '../utils/nietzscheAPI.js'
+import { fetchBookInfo } from '../../utils/nietzscheAPI.js'
 
 export const BookInfo = (props) => {
   const [fetchedBookInfo] = createResource(

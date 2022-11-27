@@ -1,5 +1,5 @@
 import { createResource, For } from 'solid-js'
-import { fetchBookChapters } from '../utils/nietzscheAPI.js'
+import { fetchBookChapters } from '../../utils/nietzscheAPI.js'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
 
 export const ChapterList = (props) => {

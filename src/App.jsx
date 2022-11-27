@@ -1,16 +1,12 @@
 //TODO tie search params to what's on screen
-//TODO replace setting signals in createEffects with memos
-//TODO refactor to remove duplicate code
 //TODO use solid observer?
-//TODO scrollWidth condition
-//TODO remove depricated events
-//TODO NAN flashing for maxPage
+//TODO reorder components
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'
-import { Nav } from './navigation/Nav.jsx'
-import { Home } from './Home.jsx'
-import { FullText } from './FullText.jsx'
+import { Nav } from './components/navigation/Nav.jsx'
+import { Home } from './components/Home.jsx'
+import { FullText } from './components/book-parts/FullText.jsx'
 
 function App() {
   let rootDivRef
