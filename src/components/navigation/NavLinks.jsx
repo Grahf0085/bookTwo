@@ -1,27 +1,20 @@
-import { For, createSignal, createResource, onMount } from 'solid-js'
+import { For, createSignal, createResource } from 'solid-js'
 import { Link } from '@solidjs/router'
 import { fetchTitles, fetchTranslators } from '../../utils/nietzscheAPI.js'
 
 export const NavLinks = (props) => {
   const [heading, setHeading] = createSignal('')
-  const [titles, setTitles] = createSignal([])
   const [hoveredBook, setHoveredBook] = createSignal('')
 
   const [translators] = createResource(hoveredBook, fetchTranslators)
   const [mobileTranslators] = createResource(heading, fetchTranslators)
+  const [fetchedTitles] = createResource(fetchTitles)
 
-  onMount(async () => {
-    const res = await fetchTitles()
-    setTitles(await res)
-  })
-
-  const handleMouseHover = (title) => {
-    setHoveredBook(title)
-  }
+  const handleMouseHover = (title) => setHoveredBook(title)
 
   return (
     <>
-      <For each={titles()} fallback={<div>Searching...</div>}>
+      <For each={fetchedTitles()} fallback={<div>Searching For Titles...</div>}>
         {(title) => (
           <>
             <div

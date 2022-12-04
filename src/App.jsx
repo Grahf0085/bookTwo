@@ -1,6 +1,8 @@
 //TODO tie search params to what's on screen
-//TODO use solid observer?
-//TODO reorder components
+//TODO reorder props drilling
+//TODO searchParams doesn't have book info when swithcing books
+//TODO stop search params from chaning when size changes
+//TODO spinner for loading slider
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'
@@ -8,7 +10,7 @@ import { Nav } from './components/navigation/Nav.jsx'
 import { Home } from './components/Home.jsx'
 import { FullText } from './components/book-parts/FullText.jsx'
 
-function App() {
+export default function App() {
   let rootDivRef
 
   const [selectedTitle, setSelectedTitle] = createSignal()
@@ -30,33 +32,18 @@ function App() {
         setSelectedTitle={setSelectedTitle}
       />
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/book'>
-          <Route path='/:translator'>
-            <Route
-              path='/:title'
-              element={
-                <FullText
-                  rootDivRef={rootDivRef}
-                  setSelectedTitle={setSelectedTitle}
-                />
-              }
+        <Route path='/' component={Home} />
+        <Route
+          path='/book/:translator/:title'
+          element={
+            <FullText
+              rootDivRef={rootDivRef}
+              setSelectedTitle={setSelectedTitle}
             />
-            <Route
-              path='/:title/:chapter'
-              element={
-                <FullText
-                  rootDivRef={rootDivRef}
-                  setSelectedTitle={setSelectedTitle}
-                />
-              }
-            />
-          </Route>
-        </Route>
+          }
+        />
         <Route path='/*' element={<Navigate href='/' />} />
       </Routes>
     </div>
   )
 }
-
-export default App

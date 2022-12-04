@@ -1,6 +1,6 @@
 import { onMount, createSignal, createEffect } from 'solid-js'
 import { useSearchParams } from '@solidjs/router'
-import { useWindowSize } from '@solid-primitives/resize-observer'
+import { createResizeObserver } from '@solid-primitives/resize-observer'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
 
 export const Slider = (props) => {
@@ -8,7 +8,7 @@ export const Slider = (props) => {
   let percentScrolled
   let visibleParagraphs = []
   let paragraphs
-  let observer
+  let intersectionObserver
 
   const observerOptions = {
     root: null, // relative to document viewport
@@ -20,22 +20,11 @@ export const Slider = (props) => {
   const [textOnScreen, setTextOnScreen] = createSignal(' ')
   const [windowWidth, setWindowWidth] = createSignal(0)
   const [windowHeight, setWindowHeight] = createSignal(0)
+  const [scrollWidth, setScrollWidth] = createSignal(0)
 
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const windowSize = useWindowSize()
-
-  const scrollWidth = () => props.fullTextRef.scrollWidth
-
-  const maxPage = () => {
-    if (
-      props.paragraphsLoaded === 'ready' &&
-      windowHeight() > 0 &&
-      windowWidth() > 0
-    )
-      return Math.ceil(scrollWidth() / windowWidth() - 1)
-    else return 0
-  }
+  const maxPage = () => Math.ceil(scrollWidth() / windowWidth() - 1)
 
   onMount(() => {
     props.rootDivRef.addEventListener('keydown', () => {
@@ -44,25 +33,46 @@ export const Slider = (props) => {
       if (event.key === 'ArrowRight' && currentPage() !== maxPage())
         setCurrentPage(currentPage() + 1)
     })
+
+    createResizeObserver(document.body, ({ width, height }, el) => {
+      setScrollWidth(props.fullTextRef.scrollWidth)
+      if (el === document.body && width !== windowWidth()) {
+        setWindowWidth(width)
+        setWindowHeight(height)
+        handleWindowChange(textOnScreen())
+      }
+      if (el === document.body && height !== windowHeight()) {
+        paragraphs.forEach((paragraph) =>
+          intersectionObserver.unobserve(paragraph)
+        )
+        setWindowWidth(width)
+        setWindowHeight(height)
+        handleWindowChange(textOnScreen())
+      }
+    })
   })
 
   const handleWindowChange = async (text) => {
-    const textOnScreen = document.getElementById(text)
-    await scrollIntoView(textOnScreen, {
-      behavior: 'smooth',
-      block: 'nearest',
-    })
-      .then(() =>
-        createEffect(() => {
-          const totalWidth = scrollWidth() - windowWidth()
-          percentScrolled = props.fullTextRef.scrollLeft / totalWidth
-          setCurrentPage(Math.ceil(maxPage() * percentScrolled))
-        })
-      )
-      .finally(() => {
-        paragraphs.forEach((paragraph) => observer.observe(paragraph))
-        percentScrolled = 0
+    if (textOnScreen() !== ' ') {
+      const textOnScreen = document.getElementById(text)
+      await scrollIntoView(textOnScreen, {
+        behavior: 'smooth',
+        block: 'nearest',
       })
+        .then(() =>
+          createEffect(() => {
+            const totalWidth = scrollWidth() - windowWidth()
+            percentScrolled = props.fullTextRef.scrollLeft / totalWidth
+            setCurrentPage(Math.ceil(maxPage() * percentScrolled))
+          })
+        )
+        .finally(() => {
+          paragraphs.forEach((paragraph) =>
+            intersectionObserver.observe(paragraph)
+          )
+          percentScrolled = 0
+        })
+    }
   }
 
   const scroll = (scrollOffset) =>
@@ -71,34 +81,17 @@ export const Slider = (props) => {
   createEffect(() => sliderRef.setAttribute('max', maxPage()))
 
   createEffect(() => {
-    if (props.paragraphsLoaded === 'ready') {
-      paragraphs = document.querySelectorAll('.bookParagraphs')
-      observer = new IntersectionObserver((entries) => {
-        visibleParagraphs = []
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            visibleParagraphs.push(entry.target.id)
-            setTextOnScreen(visibleParagraphs[0])
-          }
-        })
-      }, observerOptions)
-      paragraphs.forEach((paragraph) => observer.observe(paragraph))
-    }
-  })
-
-  createEffect(() => {
-    const windowWidthLocal = windowSize.width
-    setWindowWidth(windowWidthLocal)
-    if (textOnScreen() !== ' ') handleWindowChange(textOnScreen())
-  })
-
-  createEffect(() => {
-    const windowHeightLocal = windowSize.height
-    setWindowHeight(windowHeightLocal)
-    if (paragraphs)
-      paragraphs.forEach((paragraph) => observer.unobserve(paragraph))
-    if (textOnScreen() !== ' ') handleWindowChange(textOnScreen())
-    return windowHeightLocal
+    paragraphs = document.querySelectorAll('.bookParagraphs')
+    intersectionObserver = new IntersectionObserver((entries) => {
+      visibleParagraphs = []
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          visibleParagraphs.push(entry.target.id)
+          setTextOnScreen(visibleParagraphs[0])
+        }
+      })
+    }, observerOptions)
+    paragraphs.forEach((paragraph) => intersectionObserver.observe(paragraph))
   })
 
   createEffect(() => {

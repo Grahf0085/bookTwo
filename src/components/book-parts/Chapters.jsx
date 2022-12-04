@@ -9,7 +9,7 @@ export const Chapters = (props) => {
   )
 
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense fallback={<p>Loading Chapters...</p>}>
       <For each={fetchedBookChapters()}>
         {(chapter) => (
           <>

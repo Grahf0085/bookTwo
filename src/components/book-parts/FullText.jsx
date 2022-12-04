@@ -1,4 +1,4 @@
-import { createSignal, createEffect } from 'solid-js'
+import { createSignal, createEffect, Show } from 'solid-js'
 import { useParams } from '@solidjs/router'
 import { BookInfo } from './BookInfo.jsx'
 import { ChapterList } from './ChapterList.jsx'
@@ -46,15 +46,19 @@ export const FullText = (props) => {
           />
         </>
       </div>
-      <Slider
-        fullTextRef={fullTextRef}
-        rootDivRef={props.rootDivRef}
-        title={title()}
-        translator={translator()}
-        percentScrolledToChapter={percentScrolledToChapter()}
-        setPercentScrolledToChapter={setPercentScrolledToChapter}
-        paragraphsLoaded={paragraphsLoaded()}
-      />
+      <Show
+        when={paragraphsLoaded() === 'ready'}
+        fallback={<p>Loading Paragraphs, then Slider...</p>}
+      >
+        <Slider
+          fullTextRef={fullTextRef}
+          rootDivRef={props.rootDivRef}
+          title={title()}
+          translator={translator()}
+          percentScrolledToChapter={percentScrolledToChapter()}
+          setPercentScrolledToChapter={setPercentScrolledToChapter}
+        />
+      </Show>
     </div>
   )
 }
