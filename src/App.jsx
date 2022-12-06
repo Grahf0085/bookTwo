@@ -1,8 +1,6 @@
 //TODO tie search params to what's on screen
-//TODO reorder props drilling
-//TODO searchParams doesn't have book info when swithcing books
-//TODO stop search params from chaning when size changes
 //TODO spinner for loading slider
+//TODO AC missing footnote on hyperborians
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'
@@ -16,7 +14,6 @@ export default function App() {
   const [selectedTitle, setSelectedTitle] = createSignal()
 
   window.addEventListener('keydown', (event) => {
-    // prevents browser search due to it messing up horizontal scrolling
     if (event.keyCode === 114 || (event.ctrlKey && event.keyCode === 70))
       event.preventDefault()
   })

@@ -43,3 +43,18 @@ export const fetchChapterParagraphs = async (bookAndTranslatorAndChapter) => {
   const results = await response.json()
   return results
 }
+
+export const fetchFootnotes = async (
+  bookAndTranslatorAndChapterAndParagraph
+) => {
+  if (bookAndTranslatorAndChapterAndParagraph[0].trim() === '') return []
+  const title = bookAndTranslatorAndChapterAndParagraph[0]
+  const translator = bookAndTranslatorAndChapterAndParagraph[1]
+  const chapter = bookAndTranslatorAndChapterAndParagraph[2]
+  const paragraph = bookAndTranslatorAndChapterAndParagraph[3]
+  const response = await fetch(
+    `http://localhost:1844/api/footnotes/${title}/${translator}/${chapter}/${paragraph}`
+  )
+  const results = await response.json()
+  return results
+}
