@@ -1,6 +1,6 @@
 import { createEffect, onCleanup, createResource, For } from 'solid-js'
 import { fetchChapterParagraphs } from '../../utils/nietzscheAPI.js'
-import { Footnotes } from './Footnotes.jsx'
+import { Paragraph } from './Paragraph.jsx'
 
 export const Paragraphs = (props) => {
   const [fetchedChapterParagraphs] = createResource(
@@ -19,26 +19,14 @@ export const Paragraphs = (props) => {
   return (
     <For each={fetchedChapterParagraphs()}>
       {(paragraph) => (
-        <>
-          <p
-            id={
-              'chapter: ' +
-              paragraph.chapterNumber +
-              ' ' +
-              'paragraph: ' +
-              paragraph.paragraphNumber
-            }
-            class='whitespace-pre-wrap overflow-scroll w-full px-20 py-2 overflow-x-hidden bookParagraphs'
-          >
-            {paragraph.paragraphText}
-          </p>
-          <Footnotes
-            paragraphNumber={paragraph.paragraphNumber}
-            chapterNumber={props.chapterNumber}
-            title={props.title}
-            translator={props.translator}
-          />
-        </>
+        <Paragraph
+          text={paragraph.paragraphText}
+          chapterNumber={paragraph.chapterNumber}
+          paragraphNumber={paragraph.paragraphNumber}
+          title={props.title}
+          translator={props.translator}
+          paragraph={props.paragraph}
+        />
       )}
     </For>
   )
