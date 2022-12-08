@@ -19,7 +19,15 @@ export const Footnotes = (props) => {
 
   return (
     <For each={fetchedFootnotes()}>
-      {(footnote) => <h1>Footnotes: {footnote.footnotes}</h1>}
+      {(footnote) => (
+        <h1
+          class={`overflow-scroll w-full px-20 py-2 overflow-x-hidden ${
+            props.showFootnotes === true ? 'block' : 'hidden'
+          }`}
+        >
+          Footnotes: {footnote.footnotes}
+        </h1>
+      )}
     </For>
   )
 }

@@ -1,6 +1,6 @@
 //TODO tie search params to what's on screen
 //TODO spinner for loading slider
-//TODO AC missing footnote on hyperborians
+//TODO spacing between paragraphs vs. chapter - shouldn't be the same
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'
