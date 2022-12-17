@@ -44,7 +44,7 @@ export const Paragraph = (props) => {
           'paragraph: ' +
           props.paragraphNumber
         }
-        class={`whitespace-pre-wrap overflow-scroll w-full px-20 py-2 overflow-x-hidden bookParagraphs`}
+        class='whitespace-pre-wrap overflow-scroll w-full px-20 py-2 overflow-x-hidden bookParagraphs'
       >
         {props.text}
       </p>
