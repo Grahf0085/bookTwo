@@ -1,4 +1,4 @@
-import { createEffect, createResource, For } from 'solid-js'
+import { createResource, For } from 'solid-js'
 import { fetchFootnotes } from '../../utils/nietzscheAPI.js'
 export const Footnotes = (props) => {
   const [fetchedFootnotes] = createResource(
@@ -11,12 +11,6 @@ export const Footnotes = (props) => {
     fetchFootnotes
   )
 
-  createEffect(() =>
-    fetchedFootnotes().length > 0
-      ? props.setHasFootnotes(true)
-      : props.setHasFootnotes(false)
-  )
-
   return (
     <For each={fetchedFootnotes()}>
       {(footnote) => (
@@ -25,7 +19,7 @@ export const Footnotes = (props) => {
             props.showFootnotes === true ? 'block' : 'hidden'
           }`}
         >
-          Footnotes: {footnote.footnotes}
+          {footnote.footnotes}
         </h1>
       )}
     </For>
