@@ -5,31 +5,25 @@ import { Footnotes } from './Footnotes.jsx'
 
 export const Paragraph = (props) => {
   const [showFootnotes, setShowFootnotes] = createSignal(false)
+  let currentParagraph
 
   onMount(() => {
-    const currentP = document.getElementById(
-      'chapter: ' +
-        props.chapterNumber +
-        ' ' +
-        'paragraph: ' +
-        props.paragraphNumber
-    )
-
-    const words = currentP.innerHTML.split(' ')
+    const words = currentParagraph.innerHTML.split(' ')
 
     words.forEach((word) => {
       if (word.match(/[A-Za-z]+[⁰¹²³⁴⁵⁶⁷⁸⁹]+/giu)) {
-        const splitParagraph = currentP.innerHTML.split(word)
+        const splitParagraph = currentParagraph.innerHTML.split(word)
         const newSpan = document.createElement('span')
         newSpan.textContent = word
         newSpan.addEventListener('click', () => {
           setShowFootnotes(!showFootnotes())
         })
         newSpan.setAttribute('style', 'font-weight: bold; cursor: pointer;')
-        currentP.innerHTML = ''
-        currentP.appendChild(document.createTextNode(splitParagraph[0]))
-        currentP.appendChild(newSpan)
-        currentP.appendChild(document.createTextNode(splitParagraph[1]))
+        currentParagraph.replaceChildren(
+          splitParagraph[0],
+          newSpan,
+          splitParagraph[1]
+        )
       }
     })
   })
@@ -37,6 +31,7 @@ export const Paragraph = (props) => {
   return (
     <>
       <p
+        ref={currentParagraph}
         id={
           'chapter: ' +
           props.chapterNumber +

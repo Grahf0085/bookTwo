@@ -52,10 +52,9 @@ export const Slider = (props) => {
     })
   })
 
-  const handleWindowChange = async (text) => {
+  const handleWindowChange = async () => {
     if (textOnScreen() !== ' ') {
-      const textOnScreen = document.getElementById(text)
-      await scrollIntoView(textOnScreen, {
+      await scrollIntoView(textOnScreen(), {
         behavior: 'smooth',
         block: 'nearest',
       })
@@ -86,7 +85,7 @@ export const Slider = (props) => {
       visibleParagraphs = []
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          visibleParagraphs.push(entry.target.id)
+          visibleParagraphs.push(entry.target)
           setTextOnScreen(visibleParagraphs[0])
         }
       })
@@ -96,11 +95,11 @@ export const Slider = (props) => {
 
   createEffect(() => {
     if (textOnScreen() !== ' ') {
-      const chapter = textOnScreen().split(' ')[1]
+      const chapter = textOnScreen().id.split(' ')[1]
       const paragraph =
         currentPage() === 0 || currentPage() === 1
           ? null
-          : textOnScreen().split(' ')[3]
+          : textOnScreen().id.split(' ')[3]
       setSearchParams({ chapter: chapter, paragraph: paragraph })
       console.log('read this: ', searchParams.paragraph) //what am I supposed to do with this?
     }
