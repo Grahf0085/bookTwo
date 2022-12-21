@@ -1,6 +1,7 @@
 //TODO tie search params to what's on screen
 //TODO spinner for loading slider
 //TODO spacing between paragraphs vs. chapter - shouldn't be the same
+//TODO some footnotes with "" in text aren't selected
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'
