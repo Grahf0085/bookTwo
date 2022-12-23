@@ -14,6 +14,7 @@ export const NoteSpan = (props) => {
       >
         {props.word}
       </span>
+      {props.restOfWord + ' '}
       <Footnotes
         paragraphNumber={props.paragraphNumber}
         chapterNumber={props.chapterNumber}

@@ -21,37 +21,24 @@ export const Paragraph = (props) => {
         <For each={props.text}>
           {(word) => {
             if (word.match(/.+[⁰¹²³⁴⁵⁶⁷⁸⁹]+/gu)) {
+              let endIndex
+              for (let value of word) {
+                if (value.match(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/))
+                  endIndex = word.lastIndexOf(value)
+              }
+              const wordWithFootnote = word.substring(0, endIndex + 1)
+              const restOfWord = word.substring(endIndex + 1)
               footnoteCount++
               return (
                 <NoteSpan
                   footnoteCount={footnoteCount}
-                  word={word}
+                  word={wordWithFootnote}
+                  restOfWord={restOfWord}
                   paragraphNumber={props.paragraphNumber}
                   chapterNumber={props.chapterNumber}
                   title={props.title}
                   translator={props.translator}
                 />
-                // <>
-                //   <span
-                //     id={footnoteCount}
-                //     style={{ 'font-weight': 'bold', cursor: 'pointer' }}
-                //     onClick={(event) => {
-                //       setShowFootnotes(!showFootnotes())
-                //       setFootnoteClicked(event.target.id)
-                //     }}
-                //   >
-                //     {word}
-                //   </span>
-                //   <Footnotes
-                //     paragraphNumber={props.paragraphNumber}
-                //     chapterNumber={props.chapterNumber}
-                //     title={props.title}
-                //     translator={props.translator}
-                //     showFootnotes={showFootnotes()}
-                //     footnoteCount={footnoteCount}
-                //     footnoteClicked={footnoteClicked()}
-                //   />
-                // </>
               )
             }
             return word + ' '
