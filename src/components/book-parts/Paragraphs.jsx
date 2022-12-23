@@ -20,7 +20,7 @@ export const Paragraphs = (props) => {
     <For each={fetchedChapterParagraphs()}>
       {(paragraph) => (
         <Paragraph
-          text={paragraph.paragraphText}
+          text={paragraph.paragraphText.split(' ')}
           chapterNumber={paragraph.chapterNumber}
           paragraphNumber={paragraph.paragraphNumber}
           title={props.title}

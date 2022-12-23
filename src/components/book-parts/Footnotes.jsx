@@ -1,4 +1,4 @@
-import { createResource, For } from 'solid-js'
+import { createResource, For, Show } from 'solid-js'
 import { fetchFootnotes } from '../../utils/nietzscheAPI.js'
 
 export const Footnotes = (props) => {
@@ -14,15 +14,12 @@ export const Footnotes = (props) => {
 
   return (
     <For each={fetchedFootnotes()}>
-      {(footnote) => (
-        <aside
-          /* style={{ top: props.mouseY, left: props.mouseX }} */
-          class={`bg-hooplaLighter ${
-            props.showFootnotes === true ? 'block' : 'block'
-          }`}
+      {(footnote, index) => (
+        <Show
+          when={props.showFootnotes === true && index() === props.footnoteCount}
         >
-          {footnote.footnotes}
-        </aside>
+          <aside class='bg-hooplaLighter'>{footnote.footnotes}</aside>
+        </Show>
       )}
     </For>
   )

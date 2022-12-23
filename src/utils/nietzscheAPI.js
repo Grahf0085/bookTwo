@@ -56,5 +56,5 @@ export const fetchFootnotes = async (
     `http://localhost:1844/api/footnotes/${title}/${translator}/${chapter}/${paragraph}`
   )
   const results = await response.json()
-  return results
+  return results.reverse()
 }
