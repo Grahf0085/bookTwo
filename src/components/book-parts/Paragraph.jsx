@@ -1,14 +1,25 @@
 //dynamically adding span into <p> element at right place implemented with much appreciated assistance from https://github.com/0kku
 
 import { For } from 'solid-js'
+import {
+  createAllParagraphs,
+  createSetAllParagraphs,
+} from '../../providers/ParagraphProviders.jsx'
 import { NoteSpan } from './NoteSpan.jsx'
 
 export const Paragraph = (props) => {
   let footnoteCount = -1
+  let paragraphRef
+
+  const allParagraphs = createAllParagraphs()
+  const setAllParagraphs = createSetAllParagraphs()
+
+  setTimeout(() => setAllParagraphs([...allParagraphs(), paragraphRef]))
 
   return (
-    <div class='relative'>
+    <>
       <p
+        ref={paragraphRef}
         id={
           'chapter: ' +
           props.chapterNumber +
@@ -45,6 +56,6 @@ export const Paragraph = (props) => {
           }}
         </For>
       </p>
-    </div>
+    </>
   )
 }

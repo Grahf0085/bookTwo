@@ -1,20 +1,13 @@
 import { onMount, createSignal, createEffect } from 'solid-js'
 import { useSearchParams } from '@solidjs/router'
 import { createResizeObserver } from '@solid-primitives/resize-observer'
+import { createAllParagraphs } from '../../providers/ParagraphProviders.jsx'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
 
 export const Slider = (props) => {
   let sliderRef
   let percentScrolled
-  let visibleParagraphs = []
-  let paragraphs
   let intersectionObserver
-
-  const observerOptions = {
-    root: null, // relative to document viewport
-    rootMargin: '0px', // margin around root. Values are similar to css property. Unitless values not allowed
-    threshold: 1.0, // visible amount of item shown in relation to root
-  }
 
   const [currentPage, setCurrentPage] = createSignal(0)
   const [textOnScreen, setTextOnScreen] = createSignal(' ')
@@ -24,37 +17,27 @@ export const Slider = (props) => {
 
   const [searchParams, setSearchParams] = useSearchParams()
 
+  const allParagraphs = createAllParagraphs()
+
   const maxPage = () => Math.ceil(scrollWidth() / windowWidth() - 1)
 
-  onMount(() => {
-    props.rootDivRef.addEventListener('keydown', () => {
-      if (event.key === 'ArrowLeft' && currentPage() !== 0)
-        setCurrentPage(currentPage() - 1)
-      if (event.key === 'ArrowRight' && currentPage() !== maxPage())
-        setCurrentPage(currentPage() + 1)
+  const intersectionObserverCallback = (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setTextOnScreen(entry)
+      }
     })
+  }
 
-    createResizeObserver(document.body, ({ width, height }, el) => {
-      setScrollWidth(props.fullTextRef.scrollWidth)
-      if (el === document.body && width !== windowWidth()) {
-        setWindowWidth(width)
-        setWindowHeight(height)
-        handleWindowChange(textOnScreen())
-      }
-      if (el === document.body && height !== windowHeight()) {
-        paragraphs.forEach((paragraph) =>
-          intersectionObserver.unobserve(paragraph)
-        )
-        setWindowWidth(width)
-        setWindowHeight(height)
-        handleWindowChange(textOnScreen())
-      }
-    })
-  })
+  const intersectionObserverOptions = {
+    root: null, // relative to document viewport
+    rootMargin: '0px', // margin around root. Values are similar to css property. Unitless values not allowed
+    threshold: 1.0, // visible amount of item shown in relation to root
+  }
 
   const handleWindowChange = async () => {
     if (textOnScreen() !== ' ') {
-      await scrollIntoView(textOnScreen(), {
+      await scrollIntoView(textOnScreen().target, {
         behavior: 'smooth',
         block: 'nearest',
       })
@@ -66,7 +49,7 @@ export const Slider = (props) => {
           })
         )
         .finally(() => {
-          paragraphs.forEach((paragraph) =>
+          allParagraphs().forEach((paragraph) =>
             intersectionObserver.observe(paragraph)
           )
           percentScrolled = 0
@@ -77,29 +60,56 @@ export const Slider = (props) => {
   const scroll = (scrollOffset) =>
     (props.fullTextRef.scrollLeft += scrollOffset)
 
+  onMount(() => {
+    props.rootDivRef.addEventListener('keydown', () => {
+      if (event.key === 'ArrowLeft')
+        setCurrentPage(Math.max(0, currentPage() - 1))
+      if (event.key === 'ArrowRight')
+        setCurrentPage(Math.min(maxPage(), currentPage() + 1))
+    })
+
+    createResizeObserver(document.body, ({ width, height }, el) => {
+      setScrollWidth(props.fullTextRef.scrollWidth)
+      if (el === document.body && width !== windowWidth()) {
+        setWindowWidth(width)
+        setWindowHeight(height)
+        handleWindowChange()
+      }
+      if (el === document.body && height !== windowHeight()) {
+        allParagraphs().forEach((paragraph) =>
+          intersectionObserver.unobserve(paragraph)
+        )
+        setWindowWidth(width)
+        setWindowHeight(height)
+        handleWindowChange()
+      }
+    })
+
+    intersectionObserver = new IntersectionObserver(
+      intersectionObserverCallback,
+      intersectionObserverOptions
+    )
+
+    allParagraphs().forEach((paragraph) =>
+      intersectionObserver.observe(paragraph)
+    )
+
+    return () => {
+      allParagraphs().forEach((paragraph) =>
+        intersectionObserver.unobserve(paragraph)
+      )
+    }
+  })
+
   createEffect(() => sliderRef.setAttribute('max', maxPage()))
 
   createEffect(() => {
-    paragraphs = document.querySelectorAll('.bookParagraphs')
-    intersectionObserver = new IntersectionObserver((entries) => {
-      visibleParagraphs = []
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          visibleParagraphs.push(entry.target)
-          setTextOnScreen(visibleParagraphs[0])
-        }
-      })
-    }, observerOptions)
-    paragraphs.forEach((paragraph) => intersectionObserver.observe(paragraph))
-  })
-
-  createEffect(() => {
     if (textOnScreen() !== ' ') {
-      const chapter = textOnScreen().id.split(' ')[1]
+      const chapter = textOnScreen().target.id.split(' ')[1]
       const paragraph =
         currentPage() === 0 || currentPage() === 1
           ? null
-          : textOnScreen().id.split(' ')[3]
+          : textOnScreen().target.id.split(' ')[3]
       setSearchParams({ chapter: chapter, paragraph: paragraph })
       console.log('read this: ', searchParams.paragraph) //what am I supposed to do with this?
     }
