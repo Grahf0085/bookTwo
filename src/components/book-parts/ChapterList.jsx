@@ -1,16 +1,18 @@
 import { createResource, For } from 'solid-js'
+import { createSetAllParagraphs } from '../../providers/ParagraphProviders.jsx'
 import { fetchBookChapters } from '../../utils/nietzscheAPI.js'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
 
 export const ChapterList = (props) => {
+  const setAllParagraphs = createSetAllParagraphs()
+
   const [fetchedChapterInfo] = createResource(
     () => [props.title, props.translator],
     fetchBookChapters
   )
 
-  const handleChapterLink = async (chapterNumber) => {
-    const chapter = document.getElementById(chapterNumber)
-    await scrollIntoView(chapter, {
+  const handleChapterLink = (chapterNumber) => {
+    scrollIntoView(props.allChapters[chapterNumber], {
       behavior: 'smooth',
       block: 'nearest',
     }).then(() => {
@@ -23,12 +25,12 @@ export const ChapterList = (props) => {
 
   return (
     <div
-      class='w-full h-full cursor-pointer bookParagraphs'
-      id={'chapter: chapter-list'}
+      ref={(el) => setAllParagraphs((p) => [...p, el])}
+      class='w-full h-full cursor-pointer'
     >
       <For each={fetchedChapterInfo()}>
         {(info) => (
-          <h1 onClick={() => handleChapterLink(info.chapterNumber)}>
+          <h1 onClick={[handleChapterLink, info.chapterNumber]}>
             {info.chapterName}
           </h1>
         )}

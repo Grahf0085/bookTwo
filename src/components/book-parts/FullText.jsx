@@ -12,6 +12,7 @@ export const FullText = (props) => {
   const [title, setTitle] = createSignal()
   const [translator, setTranslator] = createSignal()
   const [paragraphsLoaded, setParagraphsLoaded] = createSignal(false)
+  const [allChapters, setAllChapters] = createSignal([])
 
   createEffect(() => {
     if (paragraphsLoaded()) fullTextRef.focus()
@@ -38,11 +39,13 @@ export const FullText = (props) => {
             fullTextRef={fullTextRef}
             setPercentScrolledToChapter={setPercentScrolledToChapter}
             paragraphsLoaded={paragraphsLoaded()}
+            allChapters={allChapters()}
           />
           <Chapters
             title={title()}
             translator={translator()}
             setParagraphsLoaded={setParagraphsLoaded}
+            setAllChapters={setAllChapters}
           />
         </>
       </div>

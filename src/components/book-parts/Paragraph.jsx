@@ -1,33 +1,19 @@
 //dynamically adding span into <p> element at right place implemented with much appreciated assistance from https://github.com/0kku
 
 import { For } from 'solid-js'
-import {
-  createAllParagraphs,
-  createSetAllParagraphs,
-} from '../../providers/ParagraphProviders.jsx'
+import { createSetAllParagraphs } from '../../providers/ParagraphProviders.jsx'
 import { NoteSpan } from './NoteSpan.jsx'
 
 export const Paragraph = (props) => {
   let footnoteCount = -1
-  let paragraphRef
 
-  const allParagraphs = createAllParagraphs()
   const setAllParagraphs = createSetAllParagraphs()
-
-  setTimeout(() => setAllParagraphs([...allParagraphs(), paragraphRef]))
 
   return (
     <>
       <p
-        ref={paragraphRef}
-        id={
-          'chapter: ' +
-          props.chapterNumber +
-          ' ' +
-          'paragraph: ' +
-          props.paragraphNumber
-        }
-        class='whitespace-pre-wrap overflow-scroll w-full px-20 py-2 overflow-x-hidden bookParagraphs'
+        ref={(el) => setAllParagraphs((p) => [...p, el])}
+        class='whitespace-pre-wrap overflow-scroll w-full px-20 py-2 overflow-x-hidden'
       >
         <For each={props.text}>
           {(word) => {

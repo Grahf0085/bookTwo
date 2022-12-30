@@ -1,5 +1,4 @@
 import { onMount, createSignal, createEffect } from 'solid-js'
-import { useSearchParams } from '@solidjs/router'
 import { createResizeObserver } from '@solid-primitives/resize-observer'
 import { createAllParagraphs } from '../../providers/ParagraphProviders.jsx'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
@@ -10,12 +9,10 @@ export const Slider = (props) => {
   let intersectionObserver
 
   const [currentPage, setCurrentPage] = createSignal(0)
-  const [textOnScreen, setTextOnScreen] = createSignal(' ')
   const [windowWidth, setWindowWidth] = createSignal(0)
   const [windowHeight, setWindowHeight] = createSignal(0)
   const [scrollWidth, setScrollWidth] = createSignal(0)
-
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [textOnScreen, setTextOnScreen] = createSignal()
 
   const allParagraphs = createAllParagraphs()
 
@@ -24,7 +21,7 @@ export const Slider = (props) => {
   const intersectionObserverCallback = (entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        setTextOnScreen(entry)
+        setTextOnScreen(entry.target)
       }
     })
   }
@@ -35,9 +32,9 @@ export const Slider = (props) => {
     threshold: 1.0, // visible amount of item shown in relation to root
   }
 
-  const handleWindowChange = async () => {
-    if (textOnScreen() !== ' ') {
-      await scrollIntoView(textOnScreen().target, {
+  const handleWindowChange = () => {
+    if (textOnScreen()) {
+      scrollIntoView(textOnScreen(), {
         behavior: 'smooth',
         block: 'nearest',
       })
@@ -104,21 +101,8 @@ export const Slider = (props) => {
   createEffect(() => sliderRef.setAttribute('max', maxPage()))
 
   createEffect(() => {
-    if (textOnScreen() !== ' ') {
-      const chapter = textOnScreen().target.id.split(' ')[1]
-      const paragraph =
-        currentPage() === 0 || currentPage() === 1
-          ? null
-          : textOnScreen().target.id.split(' ')[3]
-      setSearchParams({ chapter: chapter, paragraph: paragraph })
-      console.log('read this: ', searchParams.paragraph) //what am I supposed to do with this?
-    }
-  })
-
-  createEffect((prev) => {
     const book = `${props.title} + ${props.translator}`
-    if (book !== prev) setCurrentPage(0)
-    return book
+    if (book) setCurrentPage(0)
   })
 
   createEffect((prev) => {
@@ -149,9 +133,12 @@ export const Slider = (props) => {
         onChange={() => setCurrentPage(parseInt(event.target.value))}
         class='w-full'
       />
-      <h2>
-        Page {currentPage()} of {maxPage()}
-      </h2>
+      <div class='flex justify-evenly'>
+        <h2>
+          Page {currentPage()} of {maxPage()}
+        </h2>
+        <h2>{props.title.replaceAll('%20', ' ')}</h2>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { For, createSignal, createResource } from 'solid-js'
-import { Link } from '@solidjs/router'
+import { A } from '@solidjs/router'
 import { fetchTitles, fetchTranslators } from '../../utils/nietzscheAPI.js'
 
 export const NavLinks = (props) => {
@@ -23,7 +23,8 @@ export const NavLinks = (props) => {
             >
               <h1
                 class={`md:cursor-pointer whitespace-nowrap font-rubik py-3 flex justify-between items-center px-4 bg-hooplaBackground md:bg-hooplaLighter rounded-sm md:border-b-2 group-hover:border-solid group-hover:border-linkHover group-hover:bg-hooplaBackground ${
-                  props.selectedTitle === title.title
+                  props.selectedTitle &&
+                  props.selectedTitle.replaceAll('%20', ' ') === title.title
                     ? 'md:border-solid border-linkHover'
                     : 'md:border-dotted'
                 }`}
@@ -47,14 +48,14 @@ export const NavLinks = (props) => {
                 <li class='px-4 invisible h-0 font-rubik'>{title.title}</li>
                 <For each={translators()}>
                   {(translator) => (
-                    <Link
+                    <A
                       href={`/book/${
                         translator.translatorName
                       }/${hoveredBook()}`}
                       class='cursor-pointer font-rubik text-sm text-linkHover my-2.5 hidden group-hover:md:block hover:md:block md:my-0 p-3'
                     >
                       {translator.translatorName}
-                    </Link>
+                    </A>
                   )}
                 </For>
               </ul>
@@ -68,14 +69,14 @@ export const NavLinks = (props) => {
                   fallback={<div>Loading...</div>}
                 >
                   {(translator) => (
-                    <Link
+                    <A
                       href={`/book/${
                         translator.translatorName
                       }/${hoveredBook()}/0`}
                       class='font-rubik text-sm text-linkHover bg-hooplaBackground py-4 pl-7'
                     >
                       {translator.translatorName}
-                    </Link>
+                    </A>
                   )}
                 </For>
               </ul>
