@@ -1,6 +1,6 @@
 import { onMount, createSignal, createEffect } from 'solid-js'
 import { createResizeObserver } from '@solid-primitives/resize-observer'
-import { createAllParagraphs } from '../../providers/ParagraphProviders.jsx'
+import { createVisibleParagraphs } from '../../providers/ParagraphProviders.jsx'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
 
 export const Slider = (props) => {
@@ -14,7 +14,7 @@ export const Slider = (props) => {
   const [scrollWidth, setScrollWidth] = createSignal(0)
   const [textOnScreen, setTextOnScreen] = createSignal()
 
-  const allParagraphs = createAllParagraphs()
+  const visibleParagraphs = createVisibleParagraphs()
 
   const maxPage = () => Math.ceil(scrollWidth() / windowWidth() - 1)
 
@@ -46,7 +46,7 @@ export const Slider = (props) => {
           })
         )
         .finally(() => {
-          allParagraphs().forEach((paragraph) =>
+          visibleParagraphs().forEach((paragraph) =>
             intersectionObserver.observe(paragraph)
           )
           percentScrolled = 0
@@ -73,7 +73,7 @@ export const Slider = (props) => {
         handleWindowChange()
       }
       if (el === document.body && height !== windowHeight()) {
-        allParagraphs().forEach((paragraph) =>
+        visibleParagraphs().forEach((paragraph) =>
           intersectionObserver.unobserve(paragraph)
         )
         setWindowWidth(width)
@@ -87,12 +87,12 @@ export const Slider = (props) => {
       intersectionObserverOptions
     )
 
-    allParagraphs().forEach((paragraph) =>
+    visibleParagraphs().forEach((paragraph) =>
       intersectionObserver.observe(paragraph)
     )
 
     return () => {
-      allParagraphs().forEach((paragraph) =>
+      visibleParagraphs().forEach((paragraph) =>
         intersectionObserver.unobserve(paragraph)
       )
     }
@@ -134,10 +134,10 @@ export const Slider = (props) => {
         class='w-full'
       />
       <div class='flex justify-evenly'>
-        <h2>
+        <h3>
           Page {currentPage()} of {maxPage()}
-        </h2>
-        <h2>{props.title.replaceAll('%20', ' ')}</h2>
+        </h3>
+        <h3>{props.title.replaceAll('%20', ' ')}</h3>
       </div>
     </div>
   )

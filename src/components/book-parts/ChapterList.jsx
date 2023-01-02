@@ -1,10 +1,10 @@
 import { createResource, For } from 'solid-js'
-import { createSetAllParagraphs } from '../../providers/ParagraphProviders.jsx'
+import { createSetVisibleParagraphs } from '../../providers/ParagraphProviders.jsx'
 import { fetchBookChapters } from '../../utils/nietzscheAPI.js'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
 
 export const ChapterList = (props) => {
-  const setAllParagraphs = createSetAllParagraphs()
+  const setVisibleParagraphs = createSetVisibleParagraphs()
 
   const [fetchedChapterInfo] = createResource(
     () => [props.title, props.translator],
@@ -25,7 +25,7 @@ export const ChapterList = (props) => {
 
   return (
     <div
-      ref={(el) => setAllParagraphs((p) => [...p, el])}
+      ref={(el) => setVisibleParagraphs((p) => [...p, el])}
       class='w-full h-full cursor-pointer'
     >
       <For each={fetchedChapterInfo()}>

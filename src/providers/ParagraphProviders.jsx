@@ -1,23 +1,25 @@
 import { createSignal, createContext, useContext } from 'solid-js'
 
-export const AllParagraphsContext = createContext()
+export const VisibleParagraphsContext = createContext()
 
-export const AllParagraphsProvider = (props) => {
-  const [allParagraphs, setAllParagraphs] = createSignal([])
+export const VisibleParagraphsProvider = (props) => {
+  const [visibleParagraphs, setVisibleParagraphs] = createSignal([])
 
   return (
-    <AllParagraphsContext.Provider value={[allParagraphs, setAllParagraphs]}>
+    <VisibleParagraphsContext.Provider
+      value={[visibleParagraphs, setVisibleParagraphs]}
+    >
       {props.children}
-    </AllParagraphsContext.Provider>
+    </VisibleParagraphsContext.Provider>
   )
 }
 
-export const createAllParagraphs = () => {
-  const allParagraphs = useContext(AllParagraphsContext)[0]
-  return allParagraphs
+export const createVisibleParagraphs = () => {
+  const visibleParagraphs = useContext(VisibleParagraphsContext)[0]
+  return visibleParagraphs
 }
 
-export const createSetAllParagraphs = () => {
-  const setAllParagraphs = useContext(AllParagraphsContext)[1]
-  return setAllParagraphs
+export const createSetVisibleParagraphs = () => {
+  const setVisibleParagraphs = useContext(VisibleParagraphsContext)[1]
+  return setVisibleParagraphs
 }

@@ -1,6 +1,8 @@
 //TODO tie search params to what's on screen
 //TODO spinner for loading slider
 //TODO spacing between paragraphs vs. chapter - shouldn't be the same
+//TODO use book subtitle
+//TODO check resize on finals ps of book
 
 import { createSignal } from 'solid-js'
 import { Route, Routes, Navigate } from '@solidjs/router'

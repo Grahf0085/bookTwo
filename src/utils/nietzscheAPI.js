@@ -58,3 +58,12 @@ export const fetchFootnotes = async (
   const results = await response.json()
   return results.reverse()
 }
+
+export const fetchSeeAlso = async (paragraphId) => {
+  /* if (paragraphID.trim() === '') return [] */
+  const response = await fetch(
+    `http://localhost:1844/api/see-also/${paragraphId}`
+  )
+  const results = await response.json()
+  return results
+}
