@@ -5,12 +5,12 @@ export const SeeAlso = (props) => {
   const [fetchedSeeAlso] = createResource(() => props.seeAlso, fetchSeeAlso)
 
   const handleSeeAlso = () => {
-    console.log('hi')
+    console.log('clicked')
   }
 
   return (
     <Show when={fetchedSeeAlso()} fallback={<></>}>
-      <h3 onClick={[handleSeeAlso]}>
+      <h3 onClick={[handleSeeAlso]} class='cursor-pointer'>
         See Also: {fetchedSeeAlso().title} translated by{' '}
         {fetchedSeeAlso().translatorName} chapter{' '}
         {fetchedSeeAlso().chapterNumber} paragraph{' '}

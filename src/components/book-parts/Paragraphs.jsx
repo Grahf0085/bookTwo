@@ -20,7 +20,7 @@ export const Paragraphs = (props) => {
   return (
     <For each={fetchedChapterParagraphs()}>
       {(paragraph) => (
-        <div class='bg-red-700'>
+        <div class='overflow-x-hidden h-full'>
           <Paragraph
             text={paragraph.paragraphText.split(' ')}
             chapterNumber={paragraph.chapterNumber}

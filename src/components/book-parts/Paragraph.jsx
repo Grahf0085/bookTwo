@@ -13,7 +13,7 @@ export const Paragraph = (props) => {
     <>
       <p
         ref={(el) => setVisibleParagraphs((p) => [...p, el])}
-        class='whitespace-pre-wrap overflow-scroll w-full px-20 py-2 overflow-x-hidden'
+        class='whitespace-pre-wrap overflow-scroll w-full h-full px-20 py-2 overflow-x-hidden'
       >
         <For each={props.text}>
           {(word) => {
