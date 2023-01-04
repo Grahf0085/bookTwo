@@ -17,7 +17,10 @@ export const BookInfo = (props) => {
     >
       <Show when={fetchedBookInfo()} fallback={<p>Loading Book Info...</p>}>
         <h1>
-          {fetchedBookInfo()[0].title}: {fetchedBookInfo()[0].subTitle}
+          {fetchedBookInfo()[0].title}
+          {fetchedBookInfo()[0].subTitle
+            ? `: ${fetchedBookInfo()[0].subTitle}`
+            : ''}
         </h1>
         <h1>{fetchedBookInfo()[0].pubDate}</h1>
         <h1>{fetchedBookInfo()[0].translatorName}</h1>

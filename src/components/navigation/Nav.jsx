@@ -1,5 +1,5 @@
 import { createSignal } from 'solid-js'
-import { Link } from '@solidjs/router'
+import { A } from '@solidjs/router'
 import { NavLinks } from './NavLinks.jsx'
 import face from '../../assets/face.png'
 
@@ -10,14 +10,13 @@ export const Nav = (props) => {
     <nav>
       <div class='flex items-center justify-between bg-hooplaLighter rounded-sm md:mx-3 md:my-3 md:max-h-full max-h-12'>
         <div class='z-50 p-5 md:w-auto w-full flex justify-between'>
-          <Link href='/'>
+          <A href='/'>
             <img
               src={face}
               alt='Nietzsche'
               class='md:h-14 md:w-14 md:cursor-pointer rounded-full h-10 w-10'
-              onClick={() => props.setSelectedTitle(null)}
             />
-          </Link>
+          </A>
           <div
             class='md:hidden flex items-center'
             onClick={() => setOpen(!open())}

@@ -137,7 +137,7 @@ export const Slider = (props) => {
         <h3>
           Page {currentPage()} of {maxPage()}
         </h3>
-        <h3>{props.title.replaceAll('%20', ' ')}</h3>
+        <h3>{props.title && props.title.replaceAll('%20', ' ')}</h3>
       </div>
     </div>
   )
