@@ -21,6 +21,7 @@ export const FullText = (props) => {
     const params = useParams()
     props.setTitle(params.title)
     setTranslator(params.translator)
+    setAllChapters([])
   })
 
   return (
