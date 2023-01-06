@@ -8,8 +8,8 @@ export const Slider = (props) => {
   let intersectionObserver
 
   const [currentPage, setCurrentPage] = createSignal(0)
-  const [windowWidth, setWindowWidth] = createSignal(window.innerWidth)
-  const [windowHeight, setWindowHeight] = createSignal(window.innerHeight)
+  const [windowWidth, setWindowWidth] = createSignal(0)
+  const [windowHeight, setWindowHeight] = createSignal(0)
   const [textOnScreen, setTextOnScreen] = createSignal()
 
   const visibleParagraphs = createVisibleParagraphs()
@@ -19,9 +19,7 @@ export const Slider = (props) => {
 
   const intersectionObserverCallback = (entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        setTextOnScreen(entry.target)
-      }
+      if (entry.isIntersecting) setTextOnScreen(entry.target)
     })
   }
 
@@ -32,25 +30,23 @@ export const Slider = (props) => {
   }
 
   const handleWindowChangeText = () => {
-    if (textOnScreen()) {
-      scrollIntoView(textOnScreen(), {
-        behavior: 'smooth',
-        block: 'nearest',
-      })
-        .then(() =>
-          createEffect(() => {
-            const totalWidth = scrollWidth() - windowWidth()
-            percentScrolled = props.fullTextRef.scrollLeft / totalWidth
-            setCurrentPage(Math.ceil(maxPage() * percentScrolled))
-          })
-        )
-        .finally(() => {
-          visibleParagraphs().forEach((paragraph) =>
-            intersectionObserver.observe(paragraph)
-          )
-          percentScrolled = 0
+    scrollIntoView(textOnScreen(), {
+      behavior: 'smooth',
+      block: 'nearest',
+    })
+      .then(() =>
+        createEffect(() => {
+          const totalWidth = scrollWidth() - windowWidth()
+          percentScrolled = props.fullTextRef.scrollLeft / totalWidth
+          setCurrentPage(Math.ceil(maxPage() * percentScrolled))
         })
-    }
+      )
+      .finally(() => {
+        visibleParagraphs().forEach((paragraph) =>
+          intersectionObserver.observe(paragraph)
+        )
+        percentScrolled = 0
+      })
   }
 
   const handleWindowChange = () => {
@@ -77,6 +73,9 @@ export const Slider = (props) => {
       if (event.key === 'ArrowRight')
         setCurrentPage(Math.min(maxPage(), currentPage() + 1))
     })
+
+    setWindowHeight(window.innerHeight)
+    setWindowWidth(window.innerWidth)
 
     window.onresize = handleWindowChange
 

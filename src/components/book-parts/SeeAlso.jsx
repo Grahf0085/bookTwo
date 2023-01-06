@@ -4,6 +4,7 @@ import { fetchSeeAlso } from '../../utils/nietzscheAPI.js'
 
 export const SeeAlso = (props) => {
   const [showSeeAlso, setShowSeeAlso] = createSignal(false)
+
   const [fetchedSeeAlso] = createResource(() => props.seeAlso, fetchSeeAlso)
 
   return (
