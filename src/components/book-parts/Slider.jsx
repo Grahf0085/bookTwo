@@ -1,5 +1,4 @@
 import { onMount, createSignal, createEffect } from 'solid-js'
-import { createResizeObserver } from '@solid-primitives/resize-observer'
 import { createVisibleParagraphs } from '../../providers/ParagraphProviders.jsx'
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
 
@@ -9,13 +8,13 @@ export const Slider = (props) => {
   let intersectionObserver
 
   const [currentPage, setCurrentPage] = createSignal(0)
-  const [windowWidth, setWindowWidth] = createSignal(0)
-  const [windowHeight, setWindowHeight] = createSignal(0)
-  const [scrollWidth, setScrollWidth] = createSignal(0)
+  const [windowWidth, setWindowWidth] = createSignal(window.innerWidth)
+  const [windowHeight, setWindowHeight] = createSignal(window.innerHeight)
   const [textOnScreen, setTextOnScreen] = createSignal()
 
   const visibleParagraphs = createVisibleParagraphs()
 
+  const scrollWidth = () => props.fullTextRef.scrollWidth
   const maxPage = () => Math.ceil(scrollWidth() / windowWidth() - 1)
 
   const intersectionObserverCallback = (entries) => {
@@ -32,7 +31,7 @@ export const Slider = (props) => {
     threshold: 1.0, // visible amount of item shown in relation to root
   }
 
-  const handleWindowChange = () => {
+  const handleWindowChangeText = () => {
     if (textOnScreen()) {
       scrollIntoView(textOnScreen(), {
         behavior: 'smooth',
@@ -54,6 +53,20 @@ export const Slider = (props) => {
     }
   }
 
+  const handleWindowChange = () => {
+    if (window.innerWidth !== windowWidth()) {
+      setWindowWidth(window.innerWidth)
+      handleWindowChangeText()
+    }
+    if (window.innerHeight !== windowHeight()) {
+      visibleParagraphs().forEach((paragraph) =>
+        intersectionObserver.unobserve(paragraph)
+      )
+      setWindowHeight(window.innerHeight)
+      handleWindowChangeText()
+    }
+  }
+
   const scroll = (scrollOffset) =>
     (props.fullTextRef.scrollLeft += scrollOffset)
 
@@ -65,22 +78,7 @@ export const Slider = (props) => {
         setCurrentPage(Math.min(maxPage(), currentPage() + 1))
     })
 
-    createResizeObserver(document.body, ({ width, height }, el) => {
-      setScrollWidth(props.fullTextRef.scrollWidth)
-      if (el === document.body && width !== windowWidth()) {
-        setWindowWidth(width)
-        setWindowHeight(height)
-        handleWindowChange()
-      }
-      if (el === document.body && height !== windowHeight()) {
-        visibleParagraphs().forEach((paragraph) =>
-          intersectionObserver.unobserve(paragraph)
-        )
-        setWindowWidth(width)
-        setWindowHeight(height)
-        handleWindowChange()
-      }
-    })
+    window.onresize = handleWindowChange
 
     intersectionObserver = new IntersectionObserver(
       intersectionObserverCallback,
