@@ -7,20 +7,21 @@ import { Slider } from './Slider.jsx'
 
 export const FullText = (props) => {
   let fullTextRef
+  let params = useParams()
 
   const [percentScrolledToChapter, setPercentScrolledToChapter] = createSignal()
-  const [translator, setTranslator] = createSignal()
   const [paragraphsLoaded, setParagraphsLoaded] = createSignal(false)
   const [allChapters, setAllChapters] = createSignal([])
+
+  createEffect(() => {
+    params = useParams()
+  })
 
   createEffect(() => {
     if (paragraphsLoaded()) fullTextRef.focus()
   })
 
   createEffect(() => {
-    const params = useParams()
-    props.setTitle(params.title)
-    setTranslator(params.translator)
     setAllChapters([])
   })
 
@@ -31,18 +32,18 @@ export const FullText = (props) => {
         ref={fullTextRef}
       >
         <>
-          <BookInfo title={props.title} translator={translator()} />
+          <BookInfo title={params.title} translator={params.translator} />
           <ChapterList
-            title={props.title}
-            translator={translator()}
+            title={params.title}
+            translator={params.translator}
             fullTextRef={fullTextRef}
             setPercentScrolledToChapter={setPercentScrolledToChapter}
             paragraphsLoaded={paragraphsLoaded()}
             allChapters={allChapters()}
           />
           <Chapters
-            title={props.title}
-            translator={translator()}
+            title={params.title}
+            translator={params.translator}
             setParagraphsLoaded={setParagraphsLoaded}
             setAllChapters={setAllChapters}
           />
@@ -55,8 +56,8 @@ export const FullText = (props) => {
         <Slider
           fullTextRef={fullTextRef}
           rootDivRef={props.rootDivRef}
-          title={props.title}
-          translator={translator()}
+          title={params.title}
+          translator={params.translator}
           percentScrolledToChapter={percentScrolledToChapter()}
           setPercentScrolledToChapter={setPercentScrolledToChapter}
         />

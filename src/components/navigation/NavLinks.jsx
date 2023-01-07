@@ -53,6 +53,7 @@ export const NavLinks = (props) => {
                         translator.translatorName
                       }/${hoveredBook()}`}
                       class='cursor-pointer font-rubik text-sm text-linkHover my-2.5 hidden group-hover:md:block hover:md:block md:my-0 p-3'
+                      onClick={() => props.setSelectedTitle(hoveredBook())}
                     >
                       {translator.translatorName}
                     </A>

@@ -108,6 +108,7 @@ export const Slider = (props) => {
       props.percentScrolledToChapter === undefined &&
       !(percentScrolled > 0)
     ) {
+      if (currentSlider === 0) props.fullTextRef.scrollLeft = 0
       if (currentSlider > prev) scroll(windowWidth() * (currentSlider - prev))
       if (currentSlider < prev) scroll(-windowWidth() * (prev - currentSlider))
     }

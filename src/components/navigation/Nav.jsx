@@ -3,8 +3,9 @@ import { A } from '@solidjs/router'
 import { NavLinks } from './NavLinks.jsx'
 import face from '../../assets/face.png'
 
-export const Nav = (props) => {
+export const Nav = () => {
   const [open, setOpen] = createSignal(false)
+  const [selectedTitle, setSelectedTitle] = createSignal()
 
   return (
     <nav>
@@ -15,6 +16,7 @@ export const Nav = (props) => {
               src={face}
               alt='Nietzsche'
               class='md:h-14 md:w-14 md:cursor-pointer rounded-full h-10 w-10'
+              onClick={() => setSelectedTitle(undefined)}
             />
           </A>
           <div
@@ -28,7 +30,10 @@ export const Nav = (props) => {
           </div>
         </div>
         <ul class='md:flex md:w-full md:justify-center hidden items-center'>
-          <NavLinks selectedTitle={props.selectedTitle} />
+          <NavLinks
+            selectedTitle={selectedTitle()}
+            setSelectedTitle={setSelectedTitle}
+          />
         </ul>
         {/* Mobile */}
         <ul
