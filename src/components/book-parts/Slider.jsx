@@ -67,7 +67,7 @@ export const Slider = (props) => {
     (props.fullTextRef.scrollLeft += scrollOffset)
 
   onMount(() => {
-    props.rootDivRef.addEventListener('keydown', () => {
+    window.addEventListener('keydown', () => {
       if (event.key === 'ArrowLeft')
         setCurrentPage(Math.max(0, currentPage() - 1))
       if (event.key === 'ArrowRight')

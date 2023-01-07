@@ -5,7 +5,7 @@ import { ChapterList } from './ChapterList.jsx'
 import { Chapters } from './Chapters.jsx'
 import { Slider } from './Slider.jsx'
 
-export const FullText = (props) => {
+export const FullText = () => {
   let fullTextRef
   let params = useParams()
 
@@ -55,7 +55,6 @@ export const FullText = (props) => {
       >
         <Slider
           fullTextRef={fullTextRef}
-          rootDivRef={props.rootDivRef}
           title={params.title}
           translator={params.translator}
           percentScrolledToChapter={percentScrolledToChapter()}
